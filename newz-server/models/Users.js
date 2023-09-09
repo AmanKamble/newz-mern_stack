@@ -1,13 +1,11 @@
 import mongoose from "mongoose";
 import validator from 'validator';
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import crypto from 'crypto';
 
 const schema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, "Please enter your name"],
+        maxlength: [100, "Name can't exceed 100 characters"],
     },
     email: {
         type: String,
@@ -26,15 +24,9 @@ const schema = new mongoose.Schema({
         enum: ["admin", "writer", "user"],
         default: "user",
     },
-    avatar: {
-        public_id: {
-            type: String,
-            required: true,
-        },
-        url: {
-            type: String,
-            required: true,
-        },
+    avatarUrl: {
+        type: String,
+        required: true,
     },
     createdAt: {
         type: Date,
