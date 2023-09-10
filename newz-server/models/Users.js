@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import validator from 'validator';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const schema = new mongoose.Schema({
     name: {
@@ -24,9 +26,15 @@ const schema = new mongoose.Schema({
         enum: ["admin", "writer", "user"],
         default: "user",
     },
-    avatarUrl: {
-        type: String,
-        required: true,
+    avatar: {
+        public_id: {
+            type: String,
+            required: true,
+        },
+        url: {
+            type: String,
+            required: true,
+        },
     },
     createdAt: {
         type: Date,
@@ -35,5 +43,17 @@ const schema = new mongoose.Schema({
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 });
+
+schema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+});
+
+schema.methods.getJWTToken = function () {
+    return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
+        expiresIn: "15d",
+    });
+}
 
 export const Users = mongoose.model("Users", schema);

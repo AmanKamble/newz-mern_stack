@@ -1,16 +1,32 @@
 import express from "express";
 import { config } from 'dotenv';
+import ErrorMiddleware from "./middlewares/Error.js";
+
 
 config({
     path: "./config/config.env"
 });
 
-// Importing and using route
-
-
 const app = express();
 
+// Using middlewares
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true,
+}))
+
+// Importing and using route
+import user from "./routes/userRoutes.js";
+
+app.use("/api/v1", user);
+
+
+
+
 export default app;
+
 app.get("/", (req, res) => {
     res.send(`<h1>Site is Working. Click <a href="${process.env.FRONTEND_URL}">here</a> to visit fronted</h1>`);
-})
+});
+
+app.use(ErrorMiddleware);
