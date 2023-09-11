@@ -12,3 +12,13 @@ export const isAuthenticated = catchAsyncError(
         next();
     }
 )
+
+export const authorizedWriter = (req, resp, next) => {
+    if (req.user.role === "admin" || req.user.role === "writer") {
+        next();
+    } else {
+        return next(
+            new ErrorHandler(`User with role '${req.user.role}' is not allowed to access this resource.`, 403)
+        );
+    }
+}

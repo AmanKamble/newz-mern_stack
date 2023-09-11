@@ -23,8 +23,7 @@ const schema = new mongoose.Schema({
         },
     },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
+        type: String,
         required: true,
     },
     category: {
