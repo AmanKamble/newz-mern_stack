@@ -1,4 +1,4 @@
-import {Users} from "../models/Users.js"
+import { Users } from "../models/Users.js"
 import { catchAsyncError } from "../middlewares/catchAsyncError.js"
 import ErrorHandler from "../utils/errorHandler.js"
 import { sendToken } from "../utils/sendToken.js";
@@ -59,6 +59,17 @@ export const logout = catchAsyncError(
         }).json({
             success: true,
             message: "Logged Out Successfully",
+        })
+    }
+);
+
+export const getMyProfile = catchAsyncError(
+    async (req, res, next) => {
+        const user = await Users.findById(req.user._id);
+
+        res.status(200).json({
+            success: true,
+            user,
         })
     }
 );
