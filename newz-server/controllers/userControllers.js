@@ -33,6 +33,22 @@ export const register = catchAsyncError(
 );
 
 
+export const login = catchAsyncError(
+    async (req, res, next) => {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return next(new ErrorHandler("Please add all fields", 400));
+        }
+        const user = await Users.findOne({ email }).select("+password");
+        if (!user) return next(new ErrorHandler("Incurrect Email or Password", 401));
+
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) return next(new ErrorHandler("Incurrect Email or Password", 401));
+
+        sendToken(res, user, `Welcome back ${user.name}`, 200);
+    }
+);
+
 export const logout = catchAsyncError(
     async (req, res, next) => {
         res.status(200).cookie("token", null, {
