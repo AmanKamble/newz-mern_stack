@@ -1,10 +1,12 @@
-
 import express from "express";
-import { register } from "../controllers/userControllers.js";
+import { getAllNews } from "../controllers/newsControllers.js";
 
 
 const router = express.Router();
 
-router.route("/register").post(register);
+// Register 
+router.route("/news").get(getAllNews);
+
+
 
 export default router;

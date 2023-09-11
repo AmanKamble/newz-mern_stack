@@ -12,16 +12,22 @@ const schema = new mongoose.Schema({
         required: [true, "Please enter news content"],
         minlength: [20, "Content must be at least 20 characters"],
     },
+    poster: {
+        public_id: {
+            type: String,
+            required: true,
+        },
+        url: {
+            type: String,
+            required: true,
+        },
+    },
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
         required: true,
     },
     category: {
-        type: String,
-        required: true,
-    },
-    imageUrl: {
         type: String,
         required: true,
     },

@@ -19,10 +19,10 @@ app.use(cookieParser());
 
 // Importing and using route
 import user from "./routes/userRoutes.js";
+import news from "./routes/newsRoutes.js"
 
 app.use("/api/v1", user);
-
-
+app.use("/api/v1", news);
 
 
 export default app;
