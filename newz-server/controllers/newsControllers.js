@@ -24,12 +24,27 @@ export const getAllNews = catchAsyncError(
     }
 );
 
+export const getMyNewz = catchAsyncError(
+    async (req, res, next) => {
+        let news; 
+        if (req.user.role === "admin") {
+            news = await News.find();
+        } else {
+            news = await News.find({ author: req.user._id });
+        }
+        res.status(200).json({
+            success: true,
+            news
+        });
+    }
+);
+
 export const createNews = catchAsyncError(async (req, res, next) => {
     const { title, content, category } = req.body;
     if (!title || !content || !category) {
         return next(new ErrorHandler("Please add all fields", 400));
     }
-    const author = req.user.name;
+    const author = req.user._id;
     const file = req.file;
     const fileUri = getDataUri(file);
     const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
