@@ -2,6 +2,7 @@ import express from "express";
 import {
     changePassword,
     forgetPassword,
+    getAllUsers,
     getMyProfile,
     login,
     logout,
@@ -11,7 +12,7 @@ import {
     updateProfilePicture
 } from "../controllers/userControllers.js";
 import singleUpload from "../middlewares/multer.js";
-import { isAuthenticated } from "../middlewares/auth.js"
+import { authorizedAdmin, isAuthenticated } from "../middlewares/auth.js"
 
 const router = express.Router();
 
@@ -34,5 +35,8 @@ router.route("/forgetpassword").post(forgetPassword);
 // Reset Password
 router.route("/resetpassword/:token").put(resetPassword);
 
+// Admin routes
+// Get All Users
+router.route("/admin/users").get(isAuthenticated, authorizedAdmin, getAllUsers) ;
 
 export default router;

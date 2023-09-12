@@ -187,3 +187,14 @@ export const resetPassword = catchAsyncError(
         })
     }
 );
+
+// Admin Controllers
+export const getAllUsers = catchAsyncError(
+    async (req, res, next) => {
+        const users = await Users.find();
+        res.status(200).json({
+            success: true,
+            users,
+        })
+    }
+);

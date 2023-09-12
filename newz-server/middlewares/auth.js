@@ -22,3 +22,12 @@ export const authorizedWriter = (req, resp, next) => {
         );
     }
 }
+
+export const authorizedAdmin = (req, resp, next) => {
+    if (req.user.role !== "admin") {
+        return next(
+            new ErrorHandler(`${req.user.role} is not allowed to access this resource.`, 403)
+        )
+    };
+    next();
+}
