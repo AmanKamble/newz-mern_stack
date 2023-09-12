@@ -4,6 +4,8 @@ import ErrorHandler from "../utils/errorHandler.js"
 import { sendToken } from "../utils/sendToken.js";
 import getDataUri from "../utils/dataUri.js";
 import cloudinary from "cloudinary";
+import { sendEmail } from "../utils/sendEmail.js";
+import crypto from 'crypto';
 
 
 export const register = catchAsyncError(
@@ -128,6 +130,60 @@ export const updateProfilePicture = catchAsyncError(
         res.status(200).json({
             success: true,
             message: "Profile Picture Updated Successfully",
+        })
+    }
+);
+
+export const forgetPassword = catchAsyncError(
+    async (req, res, next) => {
+        const { email } = req.body;
+        if (!email) {
+            return next(new ErrorHandler("Please Enter Email", 400));
+        }
+        const user = await Users.findOne({ email });
+        if (!user) {
+            return next(new ErrorHandler("User dose not exist", 400));
+        }
+
+        const resetToken = await user.getResetToken();
+
+        await user.save();
+
+        // send token via email
+        const url = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
+        const message = `Click on thelink to reset your password. ${url}. If you have not request then please ignore.`;
+        await sendEmail(user.email, "NewZ APP - Reset Password", message);
+
+        res.status(200).json({
+            success: true,
+            message: `Reset token has been sent to ${user.email}`,
+        })
+    }
+);
+
+export const resetPassword = catchAsyncError(
+    async (req, res, next) => {
+        const { token } = req.params;
+        const resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
+        const user = await Users.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: {
+                $gt: Date.now(),
+            }
+        });
+        if (!user) {
+            return next(new ErrorHandler("Token is invalid or has been expired", 401));
+        }
+        user.password = req.body.password;
+
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Password Changed Successfully",
         })
     }
 );
