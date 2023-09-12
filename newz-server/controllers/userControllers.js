@@ -94,3 +94,19 @@ export const changePassword = catchAsyncError(
         })
     }
 );
+
+export const updateProfile = catchAsyncError(
+    async (req, res, next) => {
+        const { name, email } = req.body;
+        const user = await Users.findById(req.user._id);
+        
+        if (name) user.name = name;
+        if (email) user.email = email;
+
+        await user.save();
+        res.status(200).json({
+            success: true,
+            message: "Profile Updated Successfully",
+        })
+    }
+);
