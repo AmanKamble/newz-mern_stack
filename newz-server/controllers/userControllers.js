@@ -110,3 +110,24 @@ export const updateProfile = catchAsyncError(
         })
     }
 );
+
+export const updateProfilePicture = catchAsyncError(
+    async (req, res, next) => {
+        const user = await Users.findById(req.user._id);
+
+        const file = req.file;
+        const fileUri = getDataUri(file);
+        const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
+        await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+
+        user.avatar = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+        }
+        await user.save();
+        res.status(200).json({
+            success: true,
+            message: "Profile Picture Updated Successfully",
+        })
+    }
+);
