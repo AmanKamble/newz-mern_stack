@@ -32,7 +32,6 @@ export const register = catchAsyncError(
     }
 );
 
-
 export const login = catchAsyncError(
     async (req, res, next) => {
         const { email, password } = req.body;
@@ -74,3 +73,24 @@ export const getMyProfile = catchAsyncError(
     }
 );
 
+export const changePassword = catchAsyncError(
+    async (req, res, next) => {
+        const { oldPassword, newPassword } = req.body;
+
+        if (!oldPassword || !newPassword) {
+            return next(new ErrorHandler("Please add all fields", 400));
+        }
+        const user = await Users.findById(req.user._id).select("+password");
+        const isMatch = await user.comparePassword(oldPassword);
+        if (!isMatch) {
+            return next(new ErrorHandler("Incorrect Old Password", 400));
+        }
+        user.password = newPassword;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Password Changed Successfully",
+        })
+    }
+);

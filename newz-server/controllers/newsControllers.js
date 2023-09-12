@@ -8,7 +8,7 @@ export const getAllNews = catchAsyncError(
     async (req, res, next) => {
         const keyward = req.query.keyward || "";
         const category = req.query.category || "";
-
+        
         const news = await News.find({
             title: {
                 $regex: new RegExp(keyward, "i"),
@@ -29,7 +29,6 @@ export const createNews = catchAsyncError(async (req, res, next) => {
     if (!title || !content || !category) {
         return next(new ErrorHandler("Please add all fields", 400));
     }
-    
     const author = req.user.name;
     const file = req.file;
     const fileUri = getDataUri(file);
@@ -50,4 +49,21 @@ export const createNews = catchAsyncError(async (req, res, next) => {
         success: true,
         message: "News created successfully.",
     })
+});
+
+export const deleteNews = catchAsyncError(async (req, res, next) => {
+    const { id } = req.params;
+    const news = await News.findById(id);
+    if (!news) {
+        return next(new ErrorHandler('News Not Found', 404));
+    }
+    // Delete course poster from Cloudinary
+    await cloudinary.v2.uploader.destroy(news.poster.public_id);
+    // Delete the course from the database
+    await News.deleteOne({ _id: id });
+
+    res.status(200).json({
+        success: true,
+        message: 'News deleted successfully.',
+    });
 });

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    changePassword,
     getMyProfile,
     login,
     logout,
@@ -7,7 +8,6 @@ import {
 } from "../controllers/userControllers.js";
 import singleUpload from "../middlewares/multer.js";
 import { isAuthenticated } from "../middlewares/auth.js"
-
 
 const router = express.Router();
 
@@ -19,6 +19,8 @@ router.route("/logout").get(logout);
 router.route("/login").post(login);
 // get my profile
 router.route("/me").get(isAuthenticated, getMyProfile);
+// Change Password
+router.route("/changepassword").put(isAuthenticated, changePassword);
 
 
 export default router;
