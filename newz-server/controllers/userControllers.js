@@ -222,3 +222,19 @@ export const updateUserRole = catchAsyncError(
     }
 );
 
+export const deleteUser = catchAsyncError(
+    async (req, res, next) => {
+        const user = await Users.findById(req.params.id);
+        if (!user) return next(new ErrorHandler("User Not Found", 404));
+        if (user._id.toString() === req.user.id.toString()) return next(new ErrorHandler("Can't delete yoursalf. If you are admin", 403));
+
+        // Cancel subscription
+
+        await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+        await Users.deleteOne(user._id);
+        res.status(200).json({
+            success: true,
+            message: "User Deleted Successfully",
+        })
+    }
+);

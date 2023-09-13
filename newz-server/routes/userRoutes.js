@@ -1,6 +1,7 @@
 import express from "express";
 import {
     changePassword,
+    deleteUser,
     forgetPassword,
     getAllUsers,
     getMyProfile,
@@ -40,7 +41,7 @@ router.route("/resetpassword/:token").put(resetPassword);
 // Get All Users
 router.route("/admin/users").get(isAuthenticated, authorizedAdmin, getAllUsers) ;
 // Upade role
-router.route("/admin/user/:id").put(isAuthenticated, authorizedAdmin, updateUserRole);
+router.route("/admin/user/:id").put(isAuthenticated, authorizedAdmin, updateUserRole).delete(isAuthenticated, authorizedAdmin, deleteUser);
 
 
 export default router;
