@@ -9,7 +9,8 @@ import {
     register,
     resetPassword,
     updateProfile,
-    updateProfilePicture
+    updateProfilePicture,
+    updateUserRole
 } from "../controllers/userControllers.js";
 import singleUpload from "../middlewares/multer.js";
 import { authorizedAdmin, isAuthenticated } from "../middlewares/auth.js"
@@ -38,5 +39,8 @@ router.route("/resetpassword/:token").put(resetPassword);
 // Admin routes
 // Get All Users
 router.route("/admin/users").get(isAuthenticated, authorizedAdmin, getAllUsers) ;
+// Upade role
+router.route("/admin/user/:id").put(isAuthenticated, authorizedAdmin, updateUserRole);
+
 
 export default router;

@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Get All News 
 router.route("/news").get(getAllNews);
-// Get My News 
+// Get My News - only writer
 router.route("/mynews").get(isAuthenticated, authorizedWriter, getMyNewz);
 // create new news - only admin and writer
 router.route("/createnews").post(isAuthenticated, authorizedWriter, singleUpload, createNews);

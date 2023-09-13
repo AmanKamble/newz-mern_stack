@@ -198,3 +198,27 @@ export const getAllUsers = catchAsyncError(
         })
     }
 );
+
+export const updateUserRole = catchAsyncError(
+    async (req, res, next) => {
+        const { role } = req.body;
+        const user = await Users.findById(req.params.id);
+        if (!user) {
+            return next(new ErrorHandler("User Not Found", 404));
+        }
+        if (user._id.toString() === req.user._id.toString()) {
+            return next(new ErrorHandler("Can't change own role", 403));
+        }
+        if (!["user", "writer", "admin"].includes(role.toLowerCase())) {
+            return next(new ErrorHandler("Invalid Role", 400));
+        }
+        user.role = role.toLowerCase(); 
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: `Role Updated to ${user.role}`,
+        });
+    }
+);
+
