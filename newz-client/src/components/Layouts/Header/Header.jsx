@@ -11,9 +11,8 @@ const LinkButton = ({ url = "/", title = "Home", onClose }) => (
 )
 
 
-const Header = () => {
+const Header = ({isAuthenticated}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isAuthenticated = true;
   const user = {
     role: "user"
   }
@@ -61,11 +60,11 @@ const Header = () => {
                     (
                       <>
                         <Link to="/login">
-                          <Button onClick={onClose} colorScheme='yellow' >Login</Button>
+                          <Button onClick={onClose} colorScheme='red' >Login</Button>
                         </Link>
                         <p>OR</p>
                         <Link to="/register">
-                          <Button onClick={onClose} colorScheme='yellow' >Sign Up</Button>
+                          <Button onClick={onClose} colorScheme='red' >Sign Up</Button>
                         </Link>
 
                       </>
