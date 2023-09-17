@@ -191,7 +191,18 @@ export const resetPassword = catchAsyncError(
 // Admin Controllers
 export const getAllUsers = catchAsyncError(
     async (req, res, next) => {
-        const users = await Users.find();
+        const role = req.query.role || "";
+        const name = req.query.name || "";
+        const users = await Users.find(
+            {
+                role: {
+                    $regex: new RegExp(role, "i"),
+                },
+                name: {
+                    $regex: new RegExp(name, "i"),
+                },
+            }
+        );
         res.status(200).json({
             success: true,
             users,

@@ -8,7 +8,6 @@ export const getAllNews = catchAsyncError(
     async (req, res, next) => {
         const keyward = req.query.keyward || "";
         const category = req.query.category || "";
-        
         const news = await News.find({
             title: {
                 $regex: new RegExp(keyward, "i"),
@@ -26,11 +25,24 @@ export const getAllNews = catchAsyncError(
 
 export const getMyNewz = catchAsyncError(
     async (req, res, next) => {
-        let news; 
+        const keyward = req.query.keyward || "";
+        let news;
         if (req.user.role === "admin") {
-            news = await News.find();
+            news = await News.find(
+                {
+                    title: {
+                        $regex: new RegExp(keyward, "i"),
+                    },
+                }
+            )
         } else {
-            news = await News.find({ author: req.user._id });
+            news = await News.find(
+                {
+                    title: {
+                        $regex: new RegExp(keyward, "i"),
+                    },
+                }
+            )
         }
         res.status(200).json({
             success: true,
