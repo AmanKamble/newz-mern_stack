@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, HStack, VStack, useDisclosure } from '@chakra-ui/react';
 import { RiDashboardFill, RiLogoutBoxLine, RiMenu5Fill } from "react-icons/ri"
+import { logout } from '../../../redux/actions/user';
+import { useDispatch } from 'react-redux';
 
 
 const LinkButton = ({ url = "/", title = "Home", onClose }) => (
@@ -11,12 +13,14 @@ const LinkButton = ({ url = "/", title = "Home", onClose }) => (
 )
 
 
-const Header = ({isAuthenticated}) => {
+const Header = ({isAuthenticated, user}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const user = {
-    role: "user"
-  }
+  const dispatch = useDispatch();
 
+  const logoutHandler = () => {
+    onClose();
+    dispatch(logout());
+}
   return (
     <>
       <Button onClick={onOpen} zIndex='overlay' colorScheme='red' width="12" height="12" rounded="full" position="fixed" top="3" left="4">
@@ -40,7 +44,7 @@ const Header = ({isAuthenticated}) => {
                             <Link to="/profile">
                               <Button onClick={onClose} variant="ghost" colorScheme='green' >Profile</Button>
                             </Link>
-                            <Button variant="ghost" colorScheme='red'  >
+                            <Button variant="ghost" colorScheme='red' onClick={logoutHandler}  >
                               <RiLogoutBoxLine style={{ margin: '4px' }} />
                               Logout
                             </Button>

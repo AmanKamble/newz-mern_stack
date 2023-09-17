@@ -25,4 +25,22 @@ export const userReducer = createReducer({}, {
     clearMessage: (state) => {
         state.message = null;
     },
+
+
+    // logout
+    logoutRequest: (state) => {
+        state.loading = true;
+    },
+    logoutSuccess: (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.message = action.payload;
+    },
+    logoutFail: (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.error = action.payload;
+    },
+
 });

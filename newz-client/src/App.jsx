@@ -10,9 +10,10 @@ import Login from './components/Login/Login';
 
 const App = () => {
   const { isAuthenticated, user, message, error, loading } = useSelector((state) => state.user);
+  
   return (
     <Router>
-      <Header isAuthenticated={isAuthenticated} />
+      <Header isAuthenticated={isAuthenticated} user={user} />
       <Routes >
         <Route path='/' element={<Home />} />
         <Route path='/news/:id' element={<News/>} />
