@@ -7,7 +7,7 @@ import { ProtectedRoute } from "protected-route-react";
 import Header from "./components/Layouts/Header/Header";
 import Home from './components/Home/Home';
 import News from './components/News/News';
-import Login from './components/Login/Login';
+import Login from './components/Auth/Login/Login';
 import Profile from './components/Profile/Profile';
 import { loadUser } from './redux/actions/user';
 

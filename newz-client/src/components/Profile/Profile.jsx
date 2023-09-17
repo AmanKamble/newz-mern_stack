@@ -18,17 +18,40 @@ import {
     VStack,
     useDisclosure
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
+import { updateProfilePicture } from '../../redux/actions/profile'
+import { loadUser } from '../../redux/actions/user'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 
 const Profile = ({ user }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const changeImageSubmitHandler = () => {
+    const { loading, message, error } = useSelector((state) => state.profile);
+    const dispatch = useDispatch();
 
+    const changeImageSubmitHandler = async (e, image) => {
+        e.preventDefault();
+        const myForm = new FormData();
+        myForm.append("file", image);
+        await dispatch(updateProfilePicture(myForm));
+        onClose();
+        dispatch(loadUser());
     }
+
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+            dispatch({ type: "clearError" });
+        }
+        if (message) {
+            toast.success(message);
+            dispatch({ type: "clearMessage" });
+        }
+    })
+
     return (
         <Container minH="90vh" maxW="container.lg" py="8">
             <Heading children="Profile" m="8" textTransform="uppercase" textAlign="center" />
@@ -62,7 +85,7 @@ const Profile = ({ user }) => {
                     </Stack>
                 </VStack>
             </Stack>
-            <ChangePhotoBox isOpen={isOpen} onClose={onClose} changeImageSubmitHandler={changeImageSubmitHandler} />
+            <ChangePhotoBox isOpen={isOpen} onClose={onClose} loading={loading} changeImageSubmitHandler={changeImageSubmitHandler} />
         </Container>
     )
 }

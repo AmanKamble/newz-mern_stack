@@ -2,7 +2,7 @@ import { Box, Button, Container, FormLabel, Heading, Input, VStack } from '@chak
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { login } from '../../redux/actions/user';
+import { login } from '../../../redux/actions/user';
 
 const Login = () => {
     const [email, setEmail] = useState('');
