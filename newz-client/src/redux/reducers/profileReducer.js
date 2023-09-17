@@ -13,4 +13,17 @@ export const profileReducer = createReducer({}, {
         state.loading = false;
         state.error = action.payload;
     },
+
+     // Updated Profile 
+     updateProfileRequest: (state) => {
+        state.loading = true;
+    },
+    updateProfileSuccess: (state, action) => {
+        state.loading = false;
+        state.message = action.payload;
+    },
+    updateProfileFail: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    },
 });
