@@ -31,3 +31,19 @@ export const updateProfile = (name, email) => async (dispatch) => {
         dispatch({ type: "updateProfileFail", payload: error.response.data.message });
     }
 }
+
+
+export const changePassword = (oldPassword, newPassword) => async (dispatch) => {
+    try {
+        dispatch({ type: "changePasswordRequest" });
+        const { data } = await axios.put(`${server}/changepassword`, { oldPassword, newPassword }, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true,
+        });
+        dispatch({ type: "changePasswordSuccess", payload: data.message });
+    } catch (error) {
+        dispatch({ type: "changePasswordFail", payload: error.response.data.message });
+    }
+}
