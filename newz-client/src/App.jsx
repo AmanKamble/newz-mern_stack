@@ -12,6 +12,7 @@ import Profile from './components/Profile/Profile';
 import { loadUser } from './redux/actions/user';
 import UpdateProfile from './components/Profile/updateProfile';
 import ChangePassword from './components/Profile/ChangePassword';
+import CreateNews from './components/Admin/CreateNews/CreateNews';
 
 const App = () => {
   const { isAuthenticated, user, message, error, loading } = useSelector((state) => state.user);
@@ -62,6 +63,11 @@ const App = () => {
           </ProtectedRoute>
         } />
 
+        <Route path='/admin/createcourse' element={
+          <ProtectedRoute isAuthenticated={isAuthenticated} adminRoute={true} isAdmin={user && (user.role === "admin" || user.role === "writer")}>
+            <CreateNews />
+          </ProtectedRoute>
+        } />
       </Routes>
       <Toaster />
     </Router>

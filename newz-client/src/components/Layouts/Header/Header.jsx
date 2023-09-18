@@ -50,7 +50,7 @@ const Header = ({isAuthenticated, user}) => {
                             </Button>
                           </HStack>
                           {
-                            user && (user.role === "admin" || user.role === "writer") && <Link to="/admin/dashboard" >
+                            user && (user.role === "admin" || user.role === "writer") && <Link to="/admin/createcourse" >
                               <Button onClick={onClose} colorScheme='yellow' variant="ghost" >
                                 < RiDashboardFill style={{ margin: '4px' }} />
                                 Dasboard
