@@ -4,6 +4,8 @@ import { Button, Container, Grid, Heading, Image, Input, Select, Textarea, VStac
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { createNews } from '../../../redux/actions/admin';
+import { fileUploadCss } from "../../Auth/Register"
+
 
 const CreateNews = () => {
     const [title, setTitle] = useState('');
@@ -12,7 +14,7 @@ const CreateNews = () => {
     const [image, setImage] = useState('');
     const [imagePrev, setImagePrev] = useState('');
     const dispatch = useDispatch();
-    // const { loading, error, message } = useSelector((state) => state.admin)
+    const { loading, error, message } = useSelector((state) => state.admin);
 
     const categories = ["Entertainment", "Cars", "Sports", "India", "Technology", "Science", "Business", "Health", "Politics", "Religion", "Travel"];
 
@@ -44,16 +46,16 @@ const CreateNews = () => {
         dispatch(createNews(myForm));
     }
 
-    //   useEffect(() => {
-    //     if (error) {
-    //       toast.error(error);
-    //       dispatch({ type: "clearError" });
-    //     }
-    //     if (message) {
-    //       toast.success(message);
-    //       dispatch({ type: "clearMessage" });
-    //     }
-    //   }, [dispatch, message, error]);
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+            dispatch({ type: "clearError" });
+        }
+        if (message) {
+            toast.success(message);
+            dispatch({ type: "clearMessage" });
+        }
+    }, [dispatch, message, error]);
 
     return (
         <Grid minH="100vh" templateColumns={["1fr", "5fr 1fr"]} >
@@ -93,13 +95,16 @@ const CreateNews = () => {
                             type='file'
                             focusBorderColor='red.300'
                             required accept='image/*'
+                            css={{
+                                "&::file-selector-button": fileUploadCss
+                            }}
                             onChange={changeImageHandler}
                         />
 
                         {
                             imagePrev && <Image src={imagePrev} boxSize="64" objectFit="contain" />
                         }
-                        <Button w="full" colorScheme='red' type='submit'>Create</Button>
+                        <Button w="full" isLoading={loading} colorScheme='red' type='submit'>Create</Button>
                     </VStack>
                 </form>
             </Container>

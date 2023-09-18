@@ -13,6 +13,7 @@ import { loadUser } from './redux/actions/user';
 import UpdateProfile from './components/Profile/updateProfile';
 import ChangePassword from './components/Profile/ChangePassword';
 import CreateNews from './components/Admin/CreateNews/CreateNews';
+import Register from './components/Auth/Register';
 
 const App = () => {
   const { isAuthenticated, user, message, error, loading } = useSelector((state) => state.user);
@@ -41,9 +42,15 @@ const App = () => {
 
         <Route path='/login' element={
           <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >
-            <Login />
+            <Login loading={loading} />
           </ProtectedRoute>
         } />
+
+        <Route path='/register' element={
+          <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >
+            <Register loading={loading} />
+          </ProtectedRoute>}
+        />
 
         <Route path='/profile' element={
           <ProtectedRoute isAuthenticated={isAuthenticated} >

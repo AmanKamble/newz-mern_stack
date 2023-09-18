@@ -3,11 +3,13 @@ import { combineReducers } from 'redux';
 import { newsReducer } from "../redux/reducers/newsReducers.js"
 import { userReducer } from "./reducers/userReducer.js";
 import { profileReducer } from "./reducers/profileReducer.js";
+import { adminReducer } from "./reducers/adminReducer.js";
 
 const rootReducer = combineReducers({
   news: newsReducer,
   user: userReducer,
-  profile:profileReducer
+  profile: profileReducer,
+  admin: adminReducer
 });
 
 const store = configureStore({

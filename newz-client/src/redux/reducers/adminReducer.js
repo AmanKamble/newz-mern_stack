@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-export const profileReducer = createReducer({}, {
+export const adminReducer = createReducer({}, {
     // Create Course
     createNewsRequest: (state) => {
         state.loading = true;

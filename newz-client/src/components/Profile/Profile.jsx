@@ -24,6 +24,7 @@ import { toast } from 'react-hot-toast'
 import { updateProfilePicture } from '../../redux/actions/profile'
 import { loadUser } from '../../redux/actions/user'
 import { useDispatch, useSelector } from 'react-redux'
+import { fileUploadCss } from '../Auth/Register'
 
 
 
@@ -140,22 +141,22 @@ function ChangePhotoBox({ isOpen, onClose, changeImageSubmitHandler, loading }) 
                                 <Avatar src={imagePrev} boxSize={["32", '48']} />
                                 <Input
                                     type='file'
-                                    // css={{ "&::file-selector-button": fileUploadCss }}
+                                    css={{ "&::file-selector-button": fileUploadCss }}
                                     accept='image/*'
                                     onChange={changeImage}
                                 />
                                 {
                                     imagePrev ?
-                                        (<Button isLoading={loading} w="full" colorScheme='yellow' type='submit' >Change</Button>)
+                                        (<Button isLoading={loading} w="full" colorScheme='red' type='submit' >Change</Button>)
                                         :
-                                        (<Button isLoading={loading} w="full" onClick={cantCHangeImage} colorScheme='yellow'>Change</Button>)
+                                        (<Button isLoading={loading} w="full" onClick={cantCHangeImage} colorScheme='red'>Change</Button>)
                                 }
                             </VStack>
                         </form>
                     </Container>
                 </ModalBody>
                 <ModalFooter >
-                    <Button mr="3" onClick={closeHandler} >Cancel</Button>
+                    <Button mr="3" variant="outline" colorScheme='red' onClick={closeHandler} >Cancel</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
