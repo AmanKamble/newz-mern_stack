@@ -10,7 +10,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <VStack spacing="8" p="16" boxShadow={"-2px 0 10px rgba(245, 8, 8, 0.5)"} >
+    <VStack spacing="6" p={["10","16"]} boxShadow={"-2px 0 10px rgba(245, 8, 8, 0.5)"} >
       <LinkButton
         url="createnews"
         Icon={RiAddCircleFill}

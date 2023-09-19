@@ -12,23 +12,23 @@ import {
     TableContainer,
     Tbody,
     Td,
-    Text,
     Th,
     Thead,
     Tr,
-    useDisclosure
 } from '@chakra-ui/react';
 import Sidebar from "../Sidebar";
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMyNews } from '../../../redux/actions/admin';
+import { deleteNews, getMyNews } from '../../../redux/actions/admin';
 
 const AdminNews = () => {
     const [keyward, setKeyward] = useState('');
     const dispatch = useDispatch();
-    const { news } = useSelector((state) => state.admin);
-    const deleteNewsHandler = (newsId) => {
-        dispatch(deleteNews(newsId));
+    const { news, loading } = useSelector((state) => state.admin);
+
+    const deleteNewsHandler = async (newsId) => {
+        await dispatch(deleteNews(newsId));
+        dispatch(getMyNews(keyward));
     }
     useEffect(() => {
         dispatch(getMyNews(keyward));
@@ -36,7 +36,7 @@ const AdminNews = () => {
     return (
         <Grid minH="100vh" templateColumns={["1fr", "5fr 1fr"]} >
             <Box p={["0", "8"]} overflowX="auto" >
-                <Heading textTransform="uppercase" mt="16" mb="10" children="All available News" textAlign={["center", "left"]} />
+                <Heading textTransform="uppercase" mt="16" mb="5" children="All available News" textAlign={["center", "left"]} />
                 <Input
                     type='text'
                     value={keyward}
@@ -47,7 +47,6 @@ const AdminNews = () => {
                 />
                 <TableContainer w={["100vw", "full"]} >
                     <Table variant="simple" >
-                        <TableCaption children="All available News in the database" />
                         <Thead >
                             <Tr >
                                 <Th textTransform="uppercase" >ID</Th>
@@ -61,7 +60,7 @@ const AdminNews = () => {
                         <Tbody >
                             {
                                 news.map((item, index) => (
-                                    <Row key={index} item={item} deleteNewsHandler={deleteNewsHandler} />
+                                    <Row key={index} item={item} loading={loading} deleteNewsHandler={deleteNewsHandler} />
                                 ))
                             }
                         </Tbody>
@@ -76,7 +75,7 @@ const AdminNews = () => {
 export default AdminNews;
 
 
-function Row({ item, deleteNewsHandler }) {
+function Row({ item, deleteNewsHandler, loading }) {
     return (
         <Tr>
             <Td>{item._id}</Td>
@@ -89,7 +88,7 @@ function Row({ item, deleteNewsHandler }) {
 
             <Td isNumeric>
                 <HStack justifyContent="flex-end" >
-                    <Button onClick={() => deleteNewsHandler(item._id)} variant="outline" colorScheme='red' >
+                    <Button onClick={() => deleteNewsHandler(item._id)} isLoading={loading} variant="outline" colorScheme='red' >
                         <RiDeleteBin7Fill />
                     </Button>
                 </HStack>

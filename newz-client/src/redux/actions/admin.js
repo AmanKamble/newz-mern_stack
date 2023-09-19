@@ -31,3 +31,16 @@ export const getMyNews = (keyward = "") => async (dispatch) => {
         dispatch({ type: "myNewsFail", payload: error.response.data.message });
     }
 };
+
+
+export const deleteNews = (newsId) => async (dispatch) => {
+    try {
+        dispatch({ type: "deleteNewsRequest" });
+        const { data } = await axios.delete(`${server}/news/${newsId}`, {
+            withCredentials: true,
+        });
+        dispatch({ type: "deleteNewsSuccess", payload: data.message });
+    } catch (error) {
+        dispatch({ type: "deleteNewsFail", payload: error.response.data.message });
+    }
+}
