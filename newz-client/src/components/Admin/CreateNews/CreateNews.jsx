@@ -75,18 +75,20 @@ const CreateNews = () => {
                             focusBorderColor='red.300'
                             onChange={(e) => setContent(e.target.value)}
                             placeholder='Content'
-                            size="sm"
-                            resize="vertical"
+                            minH="150px"
+                            lineHeight="1.2"
                         />
                         <Select
-                            focusBorderColor='red.300'
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
+                            focusBorderColor='red.300'
                         >
-                            <option value="" Select>Select Category</option>
+                            <option value="">Select Category</option>
                             {
                                 categories.map((item, index) => (
-                                    <option key={index} value={item}>{item}</option>
+                                    <option key={index} value={item}>
+                                        {item}
+                                    </option>
                                 ))
                             }
                         </Select>

@@ -28,21 +28,20 @@ export const getMyNewz = catchAsyncError(
         const keyward = req.query.keyward || "";
         let news;
         if (req.user.role === "admin") {
+            news = await News.find({
+                title: {
+                    $regex: new RegExp(keyward, "i"),
+                }
+            })
+        } else  {
             news = await News.find(
                 {
+                    author: req.user._id,
                     title: {
                         $regex: new RegExp(keyward, "i"),
-                    },
+                    }
                 }
-            )
-        } else {
-            news = await News.find(
-                {
-                    title: {
-                        $regex: new RegExp(keyward, "i"),
-                    },
-                }
-            )
+            );
         }
         res.status(200).json({
             success: true,

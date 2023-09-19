@@ -15,3 +15,19 @@ export const createNews = (formData) => async (dispatch) => {
         dispatch({ type: "createNewsFail", payload: error.response.data.message });
     }
 }
+
+
+export const getMyNews = (keyward = "") => async (dispatch) => {
+    try {
+        dispatch({ type: "myNewsRequest" });
+        const { data } = await axios.get(`${server}/mynews?keyward=${keyward}`, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true,
+        });
+        dispatch({ type: "myNewsSuccess", payload: data.news });
+    } catch (error) {
+        dispatch({ type: "myNewsFail", payload: error.response.data.message });
+    }
+};

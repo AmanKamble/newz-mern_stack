@@ -26,8 +26,6 @@ import { loadUser } from '../../redux/actions/user'
 import { useDispatch, useSelector } from 'react-redux'
 import { fileUploadCss } from '../Auth/Register'
 
-
-
 const Profile = ({ user }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { loading, message, error } = useSelector((state) => state.profile);
@@ -125,7 +123,7 @@ function ChangePhotoBox({ isOpen, onClose, changeImageSubmitHandler, loading }) 
         setImagePrev('');
         setImage();
     }
-    const cantCHangeImage = () => {
+    const cantChangeImage = () => {
         toast.error("Select Image")
     }
     return (
@@ -149,7 +147,7 @@ function ChangePhotoBox({ isOpen, onClose, changeImageSubmitHandler, loading }) 
                                     imagePrev ?
                                         (<Button isLoading={loading} w="full" colorScheme='red' type='submit' >Change</Button>)
                                         :
-                                        (<Button isLoading={loading} w="full" onClick={cantCHangeImage} colorScheme='red'>Change</Button>)
+                                        (<Button isLoading={loading} w="full" onClick={cantChangeImage} colorScheme='red'>Change</Button>)
                                 }
                             </VStack>
                         </form>

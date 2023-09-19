@@ -15,7 +15,7 @@ const Sidebar = () => {
         url="createnews"
         Icon={RiAddCircleFill}
         text="Create News"
-        active={location.pathname === "/admin/createcourse"}
+        active={location.pathname === "/admin/createnews"}
       />
       <LinkButton
         url="news"

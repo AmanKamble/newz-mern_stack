@@ -38,7 +38,7 @@ const Home = () => {
     const [keyword, setKeyword] = useState('');
     const [category, setCategory] = useState('');
     const dispatch = useDispatch();
-    const { loading, news, error, message } = useSelector((state) => state.news);
+    const { news, error, message } = useSelector((state) => state.news);
 
 
     const categories = ["Entertainment", "Cars", "Sports", "India", "Technology", "Science", "Business", "Health", "Politics", "Religion", "Travel"];
@@ -59,7 +59,7 @@ const Home = () => {
     }, [dispatch, error, message]);
     useEffect(() => {
         dispatch(getAllNews(category, keyword));
-    }, [dispatch, category, keyword,]);
+    }, [dispatch, category, keyword]);
 
     return (
         <Container minH="95vh" maxW="container.xl" paddingY="8">
