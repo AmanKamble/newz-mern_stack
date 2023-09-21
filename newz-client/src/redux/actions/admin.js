@@ -58,3 +58,16 @@ export const getAllUsers = (id = "") => async (dispatch) => {
         dispatch({ type: "allUsersFail", payload: error.response.data.message });
     }
 };
+
+
+export const deleteUser = (userId) => async (dispatch) => {
+    try {
+        dispatch({ type: "deleteUserRequest" });
+        const { data } = await axios.delete(`${server}/admin/user/${userId}`, {
+            withCredentials: true,
+        });
+        dispatch({ type: "deleteUserSuccess", payload: data.message });
+    } catch (error) {
+        dispatch({ type: "deleteUserFail", payload: error.response.data.message });
+    }
+}

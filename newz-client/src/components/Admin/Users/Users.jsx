@@ -4,7 +4,7 @@ import NewsModal from './NewsModal';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import Sidebar from '../Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers } from '../../../redux/actions/admin';
+import { deleteUser, getAllUsers } from '../../../redux/actions/admin';
 
 
 const Users = () => {
@@ -21,6 +21,11 @@ const Users = () => {
     const detailHandler = (user) => {
         setUserDetail(user);
         onOpen()
+    }
+
+    const deleteUserHandler = async (userId) => {
+        await dispatch(deleteUser(userId));
+        dispatch(getAllUsers());
     }
 
     return (
@@ -50,7 +55,7 @@ const Users = () => {
                         <Tbody >
                             {
                                 users.map((item, index) => (
-                                    <Row key={index} onOpen={onOpen} item={item} detailHandler={detailHandler} />
+                                    <Row key={index} onOpen={onOpen} item={item} detailHandler={detailHandler} deleteUserHandler={deleteUserHandler} />
                                 ))
                             }
                         </Tbody>
@@ -70,7 +75,7 @@ const Users = () => {
 export default Users
 
 
-function Row({ onOpen, item, detailHandler }) {
+function Row({ onOpen, item, detailHandler, deleteUserHandler }) {
     return (
         <Tr>
             <Td>{item._id}</Td>
@@ -80,7 +85,7 @@ function Row({ onOpen, item, detailHandler }) {
             <Td isNumeric>
                 <HStack justifyContent="flex-end" >
                     <Button onClick={() => detailHandler(item)} variant="outline" colorScheme='green'>Change Role</Button>
-                    <Button variant="outline" colorScheme='red' >
+                    <Button variant="outline" onClick={() => deleteUserHandler(item._id)} colorScheme='red' >
                         <RiDeleteBin7Fill />
                     </Button>
                 </HStack>

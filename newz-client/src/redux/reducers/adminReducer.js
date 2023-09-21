@@ -60,4 +60,17 @@ export const adminReducer = createReducer({ news: [], users: [] }, {
         state.loading = false;
         state.error = action.payload;
     },
+
+    // Delete User
+    deleteUserRequest: (state) => {
+        state.loading = true;
+    },
+    deleteUserSuccess: (state, action) => {
+        state.loading = false;
+        state.message = action.payload
+    },
+    deleteUserFail: (state, action) => {
+        state.loading = false;
+        state.error = action.payload
+    },
 });

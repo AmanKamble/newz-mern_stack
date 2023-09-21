@@ -1,6 +1,5 @@
 import { Avatar, Box, Button, Container, HStack, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, VStack, } from '@chakra-ui/react';
 import React from 'react';
-import { RiDeleteBin7Fill } from 'react-icons/ri';
 
 const NewsModal = ({ isOpen, onClose, userDetail }) => {
     console.log()

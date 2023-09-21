@@ -196,7 +196,8 @@ export const getAllUsers = catchAsyncError(async (req, res, next) => {
     if (id) {
         query = { _id: id };
     }
-    const users = await Users.find(query);
+    let users = await Users.find(query);
+    users = users.filter((item) => item._id.toString() !== req.user._id.toString());
     res.status(200).json({
         success: true,
         users,
