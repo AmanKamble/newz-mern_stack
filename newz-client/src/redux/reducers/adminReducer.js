@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-export const adminReducer = createReducer({ news: [] }, {
+export const adminReducer = createReducer({ news: [], users: [] }, {
     // Create Course
     createNewsRequest: (state) => {
         state.loading = true;
@@ -46,5 +46,18 @@ export const adminReducer = createReducer({ news: [] }, {
     deleteNewsFail: (state, action) => {
         state.loading = false;
         state.error = action.payload
+    },
+
+    // All Users request
+    allUsersRequest: (state) => {
+        state.loading = true;
+    },
+    allUsersSuccess: (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+    },
+    allUsersFail: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
     },
 });

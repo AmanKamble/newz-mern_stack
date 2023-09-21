@@ -1,4 +1,5 @@
 import { Users } from "../models/Users.js"
+import mongoose from "mongoose";
 import { catchAsyncError } from "../middlewares/catchAsyncError.js"
 import ErrorHandler from "../utils/errorHandler.js"
 import { sendToken } from "../utils/sendToken.js";
@@ -101,7 +102,7 @@ export const updateProfile = catchAsyncError(
     async (req, res, next) => {
         const { name, email } = req.body;
         const user = await Users.findById(req.user._id);
-        
+
         if (name) user.name = name;
         if (email) user.email = email;
 
@@ -189,26 +190,19 @@ export const resetPassword = catchAsyncError(
 );
 
 // Admin Controllers
-export const getAllUsers = catchAsyncError(
-    async (req, res, next) => {
-        const role = req.query.role || "";
-        const name = req.query.name || "";
-        const users = await Users.find(
-            {
-                role: {
-                    $regex: new RegExp(role, "i"),
-                },
-                name: {
-                    $regex: new RegExp(name, "i"),
-                },
-            }
-        );
-        res.status(200).json({
-            success: true,
-            users,
-        })
+export const getAllUsers = catchAsyncError(async (req, res, next) => {
+    const id = req.query.id || "";
+    let query = {};
+    if (id) {
+        query = { _id: id };
     }
-);
+    const users = await Users.find(query);
+    res.status(200).json({
+        success: true,
+        users,
+    });
+});
+
 
 export const updateUserRole = catchAsyncError(
     async (req, res, next) => {
@@ -223,7 +217,7 @@ export const updateUserRole = catchAsyncError(
         if (!["user", "writer", "admin"].includes(role.toLowerCase())) {
             return next(new ErrorHandler("Invalid Role", 400));
         }
-        user.role = role.toLowerCase(); 
+        user.role = role.toLowerCase();
         await user.save();
 
         res.status(200).json({

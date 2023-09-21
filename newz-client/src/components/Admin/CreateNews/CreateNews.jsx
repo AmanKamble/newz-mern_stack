@@ -13,6 +13,7 @@ const CreateNews = () => {
     const [category, setCategory] = useState('');
     const [image, setImage] = useState('');
     const [imagePrev, setImagePrev] = useState('');
+
     const dispatch = useDispatch();
     const { loading, error, message } = useSelector((state) => state.admin);
 
@@ -34,7 +35,7 @@ const CreateNews = () => {
         }
     };
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
         const myForm = new FormData();
 
@@ -42,8 +43,12 @@ const CreateNews = () => {
         myForm.append("content", content);
         myForm.append("category", category);
         myForm.append("file", image);
-
-        dispatch(createNews(myForm));
+        await dispatch(createNews(myForm));
+        setTitle('');
+        setContent('');
+        setCategory('');
+        setImagePrev('');
+        setImage('');
     }
 
     useEffect(() => {

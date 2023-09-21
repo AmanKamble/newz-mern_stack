@@ -32,7 +32,6 @@ export const getMyNews = (keyward = "") => async (dispatch) => {
     }
 };
 
-
 export const deleteNews = (newsId) => async (dispatch) => {
     try {
         dispatch({ type: "deleteNewsRequest" });
@@ -44,3 +43,18 @@ export const deleteNews = (newsId) => async (dispatch) => {
         dispatch({ type: "deleteNewsFail", payload: error.response.data.message });
     }
 }
+
+export const getAllUsers = (id = "") => async (dispatch) => {
+    try {
+        dispatch({ type: "allUsersRequest" });
+        const { data } = await axios.get(`${server}/admin/users?id=${id}`, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true,
+        });
+        dispatch({ type: "allUsersSuccess", payload: data.users });
+    } catch (error) {
+        dispatch({ type: "allUsersFail", payload: error.response.data.message });
+    }
+};
