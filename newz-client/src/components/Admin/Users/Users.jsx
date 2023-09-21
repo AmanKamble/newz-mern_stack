@@ -1,6 +1,6 @@
 import { Box, Button, Grid, HStack, Heading, Input, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import NewsModal from './NewsModal';
+import UserModal from './UserModal';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import Sidebar from '../Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,7 @@ const Users = () => {
     const [id, setId] = useState("");
     const [userDetail, setUserDetail] = useState();
     const dispatch = useDispatch();
-    const { users } = useSelector((state) => state.admin);
+    const {loading, users } = useSelector((state) => state.admin);
 
     useEffect(() => {
         dispatch(getAllUsers(id));
@@ -61,10 +61,11 @@ const Users = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <NewsModal
+                <UserModal
                     isOpen={isOpen}
                     onClose={onClose}
                     userDetail={userDetail}
+                    loading={loading}
                 />
             </Box>
             <Sidebar />

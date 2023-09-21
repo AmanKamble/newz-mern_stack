@@ -40,7 +40,7 @@ router.route("/resetpassword/:token").put(resetPassword);
 // Admin routes
 // Get All Users
 router.route("/admin/users").get(isAuthenticated, authorizedAdmin, getAllUsers) ;
-// Upade role
+// Upade role and delete user
 router.route("/admin/user/:id").put(isAuthenticated, authorizedAdmin, updateUserRole).delete(isAuthenticated, authorizedAdmin, deleteUser);
 
 

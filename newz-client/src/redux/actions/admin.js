@@ -71,3 +71,15 @@ export const deleteUser = (userId) => async (dispatch) => {
         dispatch({ type: "deleteUserFail", payload: error.response.data.message });
     }
 }
+
+export const changeUserRole = (userId, role) => async (dispatch) => {
+    try {
+        dispatch({ type: "changeUserRoleRequest" });
+        const { data } = await axios.put(`${server}/admin/user/${userId}`, { role }, {
+            withCredentials: true,
+        });
+        dispatch({ type: "changeUserRoleSuccess", payload: data.message });
+    } catch (error) {
+        dispatch({ type: "changeUserRoleFail", payload: error.response.data.message });
+    }
+}

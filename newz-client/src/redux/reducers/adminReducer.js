@@ -73,4 +73,17 @@ export const adminReducer = createReducer({ news: [], users: [] }, {
         state.loading = false;
         state.error = action.payload
     },
+
+    // Change User Role
+    changeUserRoleRequest: (state) => {
+        state.loading = true;
+    },
+    changeUserRoleSuccess: (state, action) => {
+        state.loading = false;
+        state.message = action.payload
+    },
+    changeUserRoleFail: (state, action) => {
+        state.loading = false;
+        state.error = action.payload
+    },
 });
