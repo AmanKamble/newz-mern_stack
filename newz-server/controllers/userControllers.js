@@ -1,5 +1,4 @@
 import { Users } from "../models/Users.js"
-import mongoose from "mongoose";
 import { catchAsyncError } from "../middlewares/catchAsyncError.js"
 import ErrorHandler from "../utils/errorHandler.js"
 import { sendToken } from "../utils/sendToken.js";

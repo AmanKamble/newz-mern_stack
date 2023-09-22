@@ -24,9 +24,11 @@ app.use(cors({
 // Importing and using route
 import user from "./routes/userRoutes.js";
 import news from "./routes/newsRoutes.js"
+import writerRequest from "./routes/writerRequestRoutes.js"
 
 app.use("/api/v1", user);
 app.use("/api/v1", news);
+app.use("/api/v1", writerRequest);
 
 
 export default app;
