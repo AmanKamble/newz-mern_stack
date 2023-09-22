@@ -62,7 +62,7 @@ const UserModal = ({ isOpen, onClose, userDetail, loading }) => {
                                 </HStack>
                                 <HStack >
                                     {
-                                        userRole && userRole !== "" && (
+                                        userRole && userRole !== userDetail.role && (
                                             <Button isLoading={loading} onClick={() => changeRoleHandler(userDetail?._id)} colorScheme='green'>Change Role</Button>
                                         )
                                     }

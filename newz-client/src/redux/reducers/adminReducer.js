@@ -99,4 +99,17 @@ export const adminReducer = createReducer({ news: [], users: [], writerRequest: 
         state.loading = false;
         state.error = action.payload;
     },
+
+    // Delete Writer Request
+    deleteWriterRequestRequest: (state) => {
+        state.loading = true;
+    },
+    deleteWriterRequestSuccess: (state, action) => {
+        state.loading = false;
+        state.message = action.payload
+    },
+    deleteWriterRequestFail: (state, action) => {
+        state.loading = false;
+        state.error = action.payload
+    },
 });

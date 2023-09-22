@@ -59,7 +59,6 @@ export const getAllUsers = (id = "") => async (dispatch) => {
     }
 };
 
-
 export const deleteUser = (userId) => async (dispatch) => {
     try {
         dispatch({ type: "deleteUserRequest" });
@@ -99,3 +98,15 @@ export const getAllWriterRequests = (id = "") => async (dispatch) => {
         dispatch({ type: "getAllWriterRequestsFail", payload: error.response.data.message });
     }
 };
+
+export const deleteWriterRequest = (requestId) => async (dispatch) => {
+    try {
+        dispatch({ type: "deleteWriterRequestRequest" });
+        const { data } = await axios.delete(`${server}/admin/deleterequest/${requestId}`, {
+            withCredentials: true,
+        });
+        dispatch({ type: "deleteWriterRequestSuccess", payload: data.message });
+    } catch (error) {
+        dispatch({ type: "deleteUserFail", payload: error.response.data.message });
+    }
+}
