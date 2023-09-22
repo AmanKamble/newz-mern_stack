@@ -1,6 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { RiAddCircleFill, RiDashboardFill, RiEyeFill, RiUser3Fill } from 'react-icons/ri';
+import { RiAddCircleFill, RiDashboardFill, RiEyeFill, RiPenNibFill, RiUser3Fill } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <VStack spacing="6" p={["10","16"]} boxShadow={"-2px 0 10px rgba(245, 8, 8, 0.5)"} >
+    <VStack spacing="6" p={["10", "16"]} boxShadow={"-2px 0 10px rgba(245, 8, 8, 0.5)"} >
       <LinkButton
         url="createnews"
         Icon={RiAddCircleFill}
@@ -25,12 +25,20 @@ const Sidebar = () => {
       />
       {
         user && user.role === "admin" && (
-          <LinkButton
-            url="users"
-            Icon={RiUser3Fill}
-            text="Users"
-            active={location.pathname === "/admin/users"}
-          />
+          <>
+            <LinkButton
+              url="users"
+              Icon={RiUser3Fill}
+              text="Users"
+              active={location.pathname === "/admin/users"}
+            />
+            <LinkButton
+              url="writerrequest"
+              Icon={RiPenNibFill}
+              text="Writer Requests"
+              active={location.pathname === "/admin/writerrequest"}
+            />
+          </>
         )
       }
 

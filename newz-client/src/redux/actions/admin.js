@@ -83,3 +83,19 @@ export const changeUserRole = (userId, role) => async (dispatch) => {
         dispatch({ type: "changeUserRoleFail", payload: error.response.data.message });
     }
 }
+
+
+export const getAllWriterRequests = (id = "") => async (dispatch) => {
+    try {
+        dispatch({ type: "getAllWriterRequestsRequest" });
+        const { data } = await axios.get(`${server}/admin/writerrequest`, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true,
+        });
+        dispatch({ type: "getAllWriterRequestsSuccess", payload: data.writerRequests });
+    } catch (error) {
+        dispatch({ type: "getAllWriterRequestsFail", payload: error.response.data.message });
+    }
+};

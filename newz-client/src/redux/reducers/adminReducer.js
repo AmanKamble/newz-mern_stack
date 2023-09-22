@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-export const adminReducer = createReducer({ news: [], users: [] }, {
+export const adminReducer = createReducer({ news: [], users: [], writerRequest: [] }, {
     // Create Course
     createNewsRequest: (state) => {
         state.loading = true;
@@ -85,5 +85,18 @@ export const adminReducer = createReducer({ news: [], users: [] }, {
     changeUserRoleFail: (state, action) => {
         state.loading = false;
         state.error = action.payload
+    },
+
+    // Get All Writer Request
+    getAllWriterRequestsRequest: (state) => {
+        state.loading = true;
+    },
+    getAllWriterRequestsSuccess: (state, action) => {
+        state.loading = false;
+        state.writerRequest = action.payload;
+    },
+    getAllWriterRequestsFail: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
     },
 });

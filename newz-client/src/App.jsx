@@ -16,6 +16,7 @@ import CreateNews from './components/Admin/CreateNews/CreateNews';
 import Register from './components/Auth/Register';
 import AdminNews from './components/Admin/AdminNews/AdminNews';
 import Users from './components/Admin/Users/Users';
+import WriterRequests from './components/Admin/WriterRequests/WriterRequests';
 
 const App = () => {
   const { isAuthenticated, user, message, error, loading } = useSelector((state) => state.user);
@@ -87,6 +88,12 @@ const App = () => {
         <Route path='/admin/users' element={
           <ProtectedRoute isAuthenticated={isAuthenticated} adminRoute={true} isAdmin={user && user.role === "admin"} >
             <Users />
+          </ProtectedRoute>
+        } />
+
+        <Route path='/admin/writerrequest' element={
+          <ProtectedRoute isAuthenticated={isAuthenticated} adminRoute={true} isAdmin={user && user.role === "admin"} >
+            <WriterRequests />
           </ProtectedRoute>
         } />
 
