@@ -12,6 +12,6 @@ router.route("/mynews").get(isAuthenticated, authorizedWriter, getMyNewz);
 // create new news - only admin and writer
 router.route("/createnews").post(isAuthenticated, authorizedWriter, singleUpload, createNews);
 // Delete news - only admin and writer
-router.route("/news/:id").delete(isAuthenticated, authorizedWriter, deleteNews);
+router.route("/newsdelete/:id").delete(isAuthenticated, authorizedWriter, deleteNews); 
 
 export default router;
