@@ -17,6 +17,7 @@ import Register from './components/Auth/Register';
 import AdminNews from './components/Admin/AdminNews/AdminNews';
 import Users from './components/Admin/Users/Users';
 import WriterRequests from './components/Admin/WriterRequests/WriterRequests';
+import SendWriterRequest from './components/SendWriterRequest/SendWriterRequest';
 
 const App = () => {
   const { isAuthenticated, user, message, error, loading } = useSelector((state) => state.user);
@@ -42,6 +43,12 @@ const App = () => {
       <Routes >
         <Route path='/' element={<Home />} />
         <Route path='/news/:id' element={<News />} />
+
+        <Route path='/sendwriterrequest' element={
+          <ProtectedRoute isAuthenticated={isAuthenticated} >
+            <SendWriterRequest />
+          </ProtectedRoute>
+        } />
 
         <Route path='/login' element={
           <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >

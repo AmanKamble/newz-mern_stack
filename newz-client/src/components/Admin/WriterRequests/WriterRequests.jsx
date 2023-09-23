@@ -19,6 +19,7 @@ const WriterRequest = ({ item, deleteWriterRequestHandler, acceptWriterRequest }
       boxShadow="md"
       backgroundColor="white"
       border="1px solid #ccc"
+      w="full"
       p="3"
     >
       <VStack mb="4" align="flex-start" spacing={2}>

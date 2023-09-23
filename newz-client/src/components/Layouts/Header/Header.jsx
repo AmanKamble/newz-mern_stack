@@ -13,14 +13,14 @@ const LinkButton = ({ url = "/", title = "Home", onClose }) => (
 )
 
 
-const Header = ({isAuthenticated, user}) => {
+const Header = ({ isAuthenticated, user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
 
   const logoutHandler = () => {
     onClose();
     dispatch(logout());
-}
+  }
   return (
     <>
       <Button onClick={onOpen} zIndex='overlay' colorScheme='red' width="12" height="12" rounded="full" position="fixed" top="3" left="4">
@@ -34,6 +34,11 @@ const Header = ({isAuthenticated, user}) => {
           <DrawerBody >
             <VStack spacing={"4"} alignItems={"flex-start"}>
               <LinkButton url="/" title="Home" onClose={onClose} />
+              {
+                isAuthenticated && user && user.role !== "admin" && user.role !== "writer" && (
+                  <LinkButton url="/sendwriterrequest" title="Send Writer Request" onClose={onClose} />
+                )
+              }
               <HStack justifyContent="space-evenly" position="absolute" bottom="2rem" width="80%" >
                 {
                   isAuthenticated ?

@@ -51,3 +51,16 @@ export const loadUser = () => async (dispatch) => {
         dispatch({ type: "loadUserFail", payload: error.response.data.message });
     }
 }
+
+
+export const sendWriterRequest = (message) => async (dispatch) => {
+    try {
+        dispatch({ type: "sendWriterRequestRequest" });
+        const { data } = await axios.post(`${server}/createrequest`, { message }, {
+            withCredentials: true,
+        });
+        dispatch({ type: "sendWriterRequestSuccess", payload: data.message });
+    } catch (error) {
+        dispatch({ type: "sendWriterRequestFail", payload: error.response.data.message });
+    }
+}

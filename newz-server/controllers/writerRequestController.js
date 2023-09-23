@@ -5,6 +5,13 @@ import ErrorHandler from "../utils/errorHandler.js";
 export const createRequest = catchAsyncError(async (req, res, next) => {
     const { message } = req.body;
     const { _id: userId, name, email, role } = req.user;
+    
+    // Check if a WriterRequest already exists for the user
+    const existingRequest = await WriterRequest.findOne({ userId });
+    if (existingRequest) {
+        return next(new ErrorHandler('Request already exists', 400));
+    }
+
     // Check if the user is an admin or writer and prevent them from sending a request
     if (role === "admin" || role === "writer") {
         return next(new ErrorHandler(`${role} cannot send requests to Be Writer`, 400));

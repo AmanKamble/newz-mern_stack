@@ -47,10 +47,11 @@ const UserModal = ({ isOpen, onClose, userDetail, loading }) => {
                                 <HStack >
                                     <Text children="Role" fontWeight="bold" />
                                     <Select
-                                        value={userRole || userDetail?.role}
+                                        value={userRole}
                                         onChange={(e) => setUserRole(e.target.value)}
                                         focusBorderColor='red.300'
                                     >
+                                        <option value="" Select>Select Category</option>
                                         {
                                             role.map((item, index) => (
                                                 <option key={index} value={item}  >
@@ -61,11 +62,7 @@ const UserModal = ({ isOpen, onClose, userDetail, loading }) => {
                                     </Select>
                                 </HStack>
                                 <HStack >
-                                    {
-                                        userRole && userRole !== userDetail.role && (
                                             <Button isLoading={loading} onClick={() => changeRoleHandler(userDetail?._id)} colorScheme='green'>Change Role</Button>
-                                        )
-                                    }
                                 </HStack>
                             </VStack>
                         </Stack>

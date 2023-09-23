@@ -73,4 +73,17 @@ export const userReducer = createReducer({}, {
         state.isAuthenticated = false;
         state.error = action.payload;
     },
+
+    // Send Writer Request
+    sendWriterRequestRequest: (state) => {
+        state.loading = true;
+    },
+    sendWriterRequestSuccess: (state, action) => {
+        state.loading = false;
+        state.message = action.payload
+    },
+    sendWriterRequestFail: (state, action) => {
+        state.loading = false;
+        state.error = action.payload
+    },
 });
