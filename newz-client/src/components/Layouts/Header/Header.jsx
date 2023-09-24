@@ -1,14 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, HStack, VStack, useDisclosure } from '@chakra-ui/react';
 import { RiDashboardFill, RiLogoutBoxLine, RiMenu5Fill } from "react-icons/ri"
 import { logout } from '../../../redux/actions/user';
 import { useDispatch } from 'react-redux';
 
 
-const LinkButton = ({ url = "/", title = "Home", onClose }) => (
+const LinkButton = ({ url = "/", title = "Home", active, onClose }) => (
   <Link to={url} >
-    <Button onClick={onClose} variant={"outline"} colorScheme='red'>{title}</Button>
+    <Button onClick={onClose} variant={active ? "solid" : "ghost"} colorScheme={active ? 'red' : 'black'}>{title}</Button>
   </Link>
 )
 
@@ -16,6 +16,8 @@ const LinkButton = ({ url = "/", title = "Home", onClose }) => (
 const Header = ({ isAuthenticated, user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
+  const location = useLocation();
+  console.log(location)
 
   const logoutHandler = () => {
     onClose();
@@ -33,7 +35,24 @@ const Header = ({ isAuthenticated, user }) => {
           <DrawerHeader children="NewZ" bg={"#d60f3a"} color={"white"} borderBottomWidth={"1px"} />
           <DrawerBody >
             <VStack spacing={"4"} alignItems={"flex-start"}>
-              <LinkButton url="/" title="Home" onClose={onClose} />
+              <LinkButton
+                url="/"
+                title="Home"
+                active={location.pathname === "/"}
+                onClose={onClose}
+              />
+              <LinkButton
+                url="/aboutus"
+                title="About Us"
+                active={location.pathname === "/aboutus"}
+                onClose={onClose}
+              />
+              <LinkButton
+                url="/contactus"
+                title="Contact Us"
+                active={location.pathname === "/contactus"}
+                onClose={onClose}
+              />
               {
                 isAuthenticated && user && user.role !== "admin" && user.role !== "writer" && (
                   <LinkButton url="/sendwriterrequest" title="Send Writer Request" onClose={onClose} />

@@ -128,7 +128,8 @@ const Home = () => {
                             </Link>
                         ))
                     ) : (
-                        <Heading opacity={0.4} mt="4" children="News Not Found" />
+
+                        <Heading opacity={0.4} h="16" mt="4" children="News Not Found" />
                     )
                 }
             </Stack>

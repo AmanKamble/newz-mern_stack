@@ -9,11 +9,11 @@ const SendWriterRequest = () => {
   const { message: Message, error, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const buttonHandler =()=>{
+  const buttonHandler = () => {
     dispatch(sendWriterRequest(message));
     setMessage("")
   }
-  
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -39,7 +39,11 @@ const SendWriterRequest = () => {
           lineHeight="1.2"
           p="5"
         />
-        <Button colorScheme='blue' onClick={buttonHandler} children="Send Writer Request" />
+        {
+          message && (
+            <Button colorScheme='blue' onClick={buttonHandler} children="Send Writer Request" />
+          )
+        }
       </Stack>
     </Container>
   )

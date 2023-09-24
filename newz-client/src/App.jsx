@@ -18,6 +18,10 @@ import AdminNews from './components/Admin/AdminNews/AdminNews';
 import Users from './components/Admin/Users/Users';
 import WriterRequests from './components/Admin/WriterRequests/WriterRequests';
 import SendWriterRequest from './components/SendWriterRequest/SendWriterRequest';
+import ForgetPassword from './components/Auth/ForgetPassword';
+import ResetPassword from './components/Auth/ResetPassword';
+import AboutUs from './components/AboutUs/AboutUs';
+import ContactUs from './components/ContactUs/ContactUs';
 
 const App = () => {
   const { isAuthenticated, user, message, error, loading } = useSelector((state) => state.user);
@@ -43,6 +47,9 @@ const App = () => {
       <Routes >
         <Route path='/' element={<Home />} />
         <Route path='/news/:id' element={<News />} />
+
+        <Route path='/aboutus' element={<AboutUs />} />
+        <Route path='/contactus' element={<ContactUs />} />
 
         <Route path='/sendwriterrequest' element={
           <ProtectedRoute isAuthenticated={isAuthenticated} >
@@ -77,6 +84,18 @@ const App = () => {
         <Route path='/changepassword' element={
           <ProtectedRoute isAuthenticated={isAuthenticated}  >
             <ChangePassword />
+          </ProtectedRoute>
+        } />
+
+        <Route path='/forgetpassword' element={
+          <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/" >
+            <ForgetPassword />
+          </ProtectedRoute>
+        } />
+
+        <Route path='/resetpassword/:token' element={
+          <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/" >
+            <ResetPassword />
           </ProtectedRoute>
         } />
 
