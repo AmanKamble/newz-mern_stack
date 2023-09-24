@@ -1,17 +1,11 @@
 import mongoose from "mongoose";
-import validator from 'validator';
 
 const schema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "Please enter your name"],
-        maxlength: [50, "Name can't exceed 50 characters"],
     },
     email: {
         type: String,
-        required: [true, "Please enter your email"],
-        unique: true,
-        validate: [validator.isEmail, "Invalid email format"],
     },
     message: {
         type: String,
