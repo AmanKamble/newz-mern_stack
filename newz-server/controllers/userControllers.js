@@ -150,7 +150,7 @@ export const forgetPassword = catchAsyncError(
         await user.save();
 
         // send token via email
-        const url = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
+        const url = `https://newz-fronted.vercel.app/resetpassword/${resetToken}`;
         const message = `Click on thelink to reset your password. ${url}. If you have not request then please ignore.`;
         await sendEmail(user.email, "NewZ APP - Reset Password", message);
 

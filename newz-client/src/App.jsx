@@ -10,7 +10,7 @@ import News from './components/News/News';
 import Login from './components/Auth/Login';
 import Profile from './components/Profile/Profile';
 import { loadUser } from './redux/actions/user';
-import UpdateProfile from './components/Profile/updateProfile';
+import UpdateProfile from './components/Profile/UpdateProfile';
 import ChangePassword from './components/Profile/ChangePassword';
 import CreateNews from './components/Admin/CreateNews/CreateNews';
 import Register from './components/Auth/Register';
@@ -25,6 +25,7 @@ import ContactUs from './components/ContactUs/ContactUs';
 
 const App = () => {
   const { isAuthenticated, user, message, error, loading } = useSelector((state) => state.user);
+  console.log(isAuthenticated, user, message, error, loading)
   const dispatch = useDispatch();
 
   useEffect(() => {

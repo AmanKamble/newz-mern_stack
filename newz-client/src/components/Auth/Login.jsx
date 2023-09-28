@@ -1,5 +1,5 @@
 import { Box, Button, Container, FormLabel, Heading, Input, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { login } from '../../redux/actions/user';
@@ -8,11 +8,14 @@ const Login = ({loading}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
+    console.log(loading)
 
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(login(email,password));
     }
+
+
 
     return (
         <Container h={"95vh"}>

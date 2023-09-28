@@ -1,7 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
-
 // USer Reducer
-export const userReducer = createReducer({}, {
+export const userReducer = createReducer({ loading: false }, {
     // login
     loginRequest: (state) => {
         state.loading = true;
@@ -25,7 +24,6 @@ export const userReducer = createReducer({}, {
     clearMessage: (state) => {
         state.message = null;
     },
-
 
     // logout
     logoutRequest: (state) => {

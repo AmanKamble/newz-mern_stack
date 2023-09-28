@@ -17,7 +17,6 @@ const Header = ({ isAuthenticated, user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const location = useLocation();
-  console.log(location)
 
   const logoutHandler = () => {
     onClose();
