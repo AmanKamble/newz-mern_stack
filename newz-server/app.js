@@ -17,10 +17,10 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 
 app.use(cors({
-    origin: "https://newz-fronted.vercel.app/",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));
+
 
 // Importing and using route
 import user from "./routes/userRoutes.js";
