@@ -27,7 +27,6 @@ app.use("/api/v1", user);
 app.use("/api/v1", news);
 app.use("/api/v1", writerRequest);
 
-
 export default app;
 
 app.get("/", (req, res) => {

@@ -8,6 +8,7 @@ const Login = ({loading}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
+    console.log(loading)
 
     const submitHandler = (e) => {
         e.preventDefault();
