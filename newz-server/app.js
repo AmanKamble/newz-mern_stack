@@ -16,11 +16,7 @@ app.use(express.urlencoded({
 }))
 app.use(cookieParser());
 
-app.use(cors({
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-}));
-
+app.use(cors());
 
 // Importing and using route
 import user from "./routes/userRoutes.js";
