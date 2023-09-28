@@ -1,5 +1,5 @@
 import { catchAsyncError } from "../middlewares/catchAsyncError.js";
-import { WriterRequest } from "../models/writerRequest.js";
+import { WriterRequest } from "../models/WriterRequest.js";
 import ErrorHandler from "../utils/errorHandler.js";
 
 export const createRequest = catchAsyncError(async (req, res, next) => {
