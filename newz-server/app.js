@@ -16,7 +16,7 @@ app.use(express.urlencoded({
 }))
 app.use(cookieParser());
 app.use(cors({
-    origin: "*",
+    origin: 'https://newz-frontend.vercel.app',
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));
