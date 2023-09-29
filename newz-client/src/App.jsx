@@ -25,7 +25,6 @@ import ContactUs from './components/ContactUs/ContactUs';
 
 const App = () => {
   const { isAuthenticated, user, message, error, loading } = useSelector((state) => state.user);
-  console.log(isAuthenticated, user, message, error, loading)
   const dispatch = useDispatch();
 
   useEffect(() => {
