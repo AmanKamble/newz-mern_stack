@@ -15,9 +15,8 @@ app.use(express.urlencoded({
     extended: true,
 }))
 app.use(cookieParser());
-
 app.use(cors({
-    origin: "process.env.FRONTEND_URL",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));
@@ -31,11 +30,10 @@ app.use("/api/v1", user);
 app.use("/api/v1", news);
 app.use("/api/v1", writerRequest);
 
-
 export default app;
 
 app.get("/", (req, res) => {
-    res.send(`<h1>Site is Working. Click <a href="${process.env.FRONTEND_URL}">here</a> to visit fronted</h1>`);
+    res.send(`<h1>Site is Working. Click <a href="https://newz-fronted.vercel.app/">here</a> to visit fronted</h1>`);
 });
 
 app.use(ErrorMiddleware);
