@@ -35,7 +35,7 @@ export const getMyNews = (keyward = "") => async (dispatch) => {
 export const deleteNews = (newsId) => async (dispatch) => {
     try {
         dispatch({ type: "deleteNewsRequest" });
-        const { data } = await axios.delete(`${server}/news/${newsId}`, {
+        const { data } = await axios.delete(`${server}/newsdelete/${newsId}`, {
             withCredentials: true,
         });
         dispatch({ type: "deleteNewsSuccess", payload: data.message });
