@@ -18,9 +18,9 @@ const News = ({ title, content, imgSrc, category }) => {
             w={["full", "410px"]}
             p="3"
         >
-            <Image src={imgSrc} boxSize="40" objectFit="contain" />
+            <Image flex={1} src={imgSrc} boxSize="40" objectFit="contain" />
 
-            <VStack mb="4" align="flex-start" spacing={2}>
+            <VStack flex={2} mb="4" align="flex-start" spacing={2}>
                 <HStack alignItems="flex-start" justifyContent="space-between" w="100%">
                     <Text fontSize="sm" textTransform="uppercase" color="gray.600">
                         {category}

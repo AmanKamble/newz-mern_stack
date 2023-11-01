@@ -16,7 +16,7 @@ app.use(express.urlencoded({
 }))
 app.use(cookieParser());
 app.use(cors({
-    origin: 'https://newz-frontend.vercel.app',
+    origin: 'https://newz-frontend.vercel.app' || 'http://localhost:5173',
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));
