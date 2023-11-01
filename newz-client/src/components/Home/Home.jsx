@@ -3,6 +3,7 @@ import { Button, Container, HStack, Heading, Image, Input, Spacer, Stack, Text, 
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllNews } from '../../redux/actions/news';
 import { Link } from 'react-router-dom';
+import dummyImage from '../../assets/Images/dummy.jpg';
 
 const News = ({ title, content, imgSrc, category }) => {
     return (
@@ -18,7 +19,7 @@ const News = ({ title, content, imgSrc, category }) => {
             w={["full", "410px"]}
             p="3"
         >
-            <Image flex={1} src={imgSrc} boxSize="40" objectFit="contain" />
+            <Image flex={1} src={imgSrc ? imgSrc : dummyImage} boxSize="40" objectFit="contain" />
 
             <VStack flex={2} mb="4" align="flex-start" spacing={2}>
                 <HStack alignItems="flex-start" justifyContent="space-between" w="100%">
@@ -27,7 +28,7 @@ const News = ({ title, content, imgSrc, category }) => {
                     </Text>
                     <Spacer />
                 </HStack>
-                <Heading textTransform="uppercase" noOfLines={3}  size="sm" children={title} />
+                <Heading textTransform="uppercase" noOfLines={3} size="sm" children={title} />
                 <Text fontSize="md" noOfLines={3} textAlign="justify"  >{content}</Text>
             </VStack>
         </HStack>
@@ -100,7 +101,7 @@ const Home = () => {
                 focusBorderColor='red.500'
             />
 
-            <Stack direction={["column", "row"]} flexWrap="wrap" justifyContent={["flex-start", "space-evenly"]} overflowY={["none","auto"]} alignItems={["center", "flex-start"]} css={{
+            <Stack direction={["column", "row"]} flexWrap="wrap" justifyContent={["flex-start", "space-evenly"]} overflowY={["none", "auto"]} alignItems={["center", "flex-start"]} css={{
                 "&::-webkit-scrollbar": {
                     width: 10,
                     height: 6,
