@@ -1,2 +1,10 @@
 /node_modules
 /config/config.env
+# TypeScript build output
+dist/
+*.tsbuildinfo
+# Yarn cache
+.yarn/
+
+# Yarn
+.yarn/
