@@ -1,45 +1,53 @@
-import { Box, Button, Container, FormLabel, Heading, Input, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { Button, Card, Flex, Form, Input, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { login } from '../../redux/actions/user';
+import { useDispatch } from 'react-redux';
 
-const Login = ({loading}) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const dispatch = useDispatch<any>();
+const { Title } = Typography;
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        dispatch(login(email,password));
-    }
+const Login = ({ loading }: { loading: boolean }) => {
+  const dispatch = useDispatch<any>();
 
+  const onFinish = (values: { email: string; password: string }) => {
+    dispatch(login(values.email, values.password));
+  };
 
+  return (
+    <Flex justify="center" align="center" style={{ minHeight: '85vh' }}>
+      <Card className="editorial-card" style={{ width: '100%', maxWidth: 420 }}>
+        <Flex vertical gap={24}>
+          <Title level={2} className="editorial-title" style={{ textAlign: 'center', marginBottom: 0 }}>
+            News Log In
+          </Title>
+          <Form layout="vertical" onFinish={onFinish} requiredMark={false}>
+            <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
+              <Input placeholder="abc@gmail.com" />
+            </Form.Item>
+            <Form.Item name="password" label="Password" rules={[{ required: true }]}>
+              <Input.Password placeholder="Password" />
+            </Form.Item>
+            <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
+              <Link to="/forgetpassword">
+                <Button type="link">Forget Password?</Button>
+              </Link>
+            </Flex>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" loading={loading} block className="primary-button">
+                Login
+              </Button>
+            </Form.Item>
+            <Flex justify="center" gap={8}>
+              <span>New User?</span>
+              <Link to="/register">
+                <Button type="link">Sign Up</Button>
+              </Link>
+            </Flex>
+          </Form>
+        </Flex>
+      </Card>
+    </Flex>
+  );
+};
 
-    return (
-        <Container h={"95vh"}>
-            <VStack h={"full"} justifyContent="center" spacing={"16"}  >
-                <Heading children="News Log In" />
-                <form onSubmit={submitHandler} style={{ width: "100%" }}>
-                    <Box my={"4"}>
-                        <FormLabel htmlFor='email' children="Email" />
-                        <Input id='email' type='email' value={email} focusBorderColor='red.500' onChange={(e) => setEmail(e.target.value)} placeholder='abc@gmail.com' required />
-                    </Box>
-                    <Box my={"4"}>
-                        <FormLabel htmlFor='password' children="Password" />
-                        <Input id='password' type='password' value={password} focusBorderColor='red.500' onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
-                    </Box>
-                    <Box >
-                        <Link to="/forgetpassword" ><Button fontSize={"sm"} variant="link" colorScheme='red' >Forget Password?</Button></Link>
-                    </Box>
-                    <Button w="full" isLoading={loading} type='submit' colorScheme='red' my={"4"} >Login</Button>
-                    <Box >
-                        New User? <Link to="/register" ><Button fontSize={"sm"} variant="link" colorScheme='red' >Sign Up</Button></Link> {" "} here
-                    </Box>
-                </form>
-            </VStack>
-        </Container>
-    )
-}
-
-export default Login
+export default Login;

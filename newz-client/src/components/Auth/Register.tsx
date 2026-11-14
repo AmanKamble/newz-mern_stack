@@ -1,103 +1,87 @@
 import React, { useState } from 'react';
-import { Avatar, Box, Button, Container, FormLabel, Heading, Input, VStack } from "@chakra-ui/react"
-import {  Link } from 'react-router-dom';
+import { Avatar, Button, Card, Flex, Form, Input, Typography, Upload } from 'antd';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { register } from '../../redux/actions/user';
+import { UploadOutlined } from '@ant-design/icons';
 
-export const fileUploadCss = {
-    cursor: "pointer",
-    marginLeft: "-5%",
-    width: "110%",
-    border: "none",
-    height: "100%",
-    color: "red",
-    backgroundColor: "white",
-}
+const { Title } = Typography;
 
+export const fileUploadCss = {};
 
-const fileUploadStyle = {
-    "&::file-selector-button": fileUploadCss
-}
+const Register = ({ loading }: { loading: boolean }) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [imagePrev, setImagePrev] = useState('');
+  const [image, setImage] = useState<any>(null);
+  const dispatch = useDispatch<any>();
 
-const Register = ({loading}) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [imagePrev, setImagePrev] = useState('');
-    const [image, setImage] = useState('');
-    const dispatch = useDispatch<any>();
-
-
-
-    const changeImageHandler = (e) => {
-        const file = e.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.readAsDataURL(file);
-            reader.onloadend = () => {
-                setImagePrev(reader.result as string);
-                setImage(file);
-            };
-        } else {
-            setImagePrev('');
-            setImage(null);
-        }
-    };
-
-    const submitHandler = (e) => {
-        e.preventDefault();
-        const myForm = new FormData(); 
-    
-        myForm.append("name", name);
-        myForm.append("email", email);
-        myForm.append("password", password);
-        myForm.append("file", image);
-    
-        dispatch(register(myForm));
+  const changeImageHandler = (file: any) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImagePrev(reader.result as string);
+        setImage(file);
+      };
+    } else {
+      setImagePrev('');
+      setImage(null);
     }
-    return (
-        <Container h={"95vh"}>
-            <VStack h={"full"} justifyContent="center" spacing={"16"}  >
-                <Heading textTransform="uppercase" children="Registration" />
-                <form onSubmit={submitHandler} style={{ width: "100%" }}>
-                    <Box my={"4"} display={"flex"} justifyContent="center">
-                        <Avatar src={imagePrev} size={"xl"} />
-                    </Box>
-                    <Box my={"4"}>
-                        <FormLabel htmlFor='name' children="Full Name" />
-                        <Input id='name' type='text' value={name} focusBorderColor='red.500' onChange={(e) => setName(e.target.value)} placeholder='abc' required />
-                    </Box>
-                    <Box my={"4"}>
-                        <FormLabel htmlFor='email' children="Email" />
-                        <Input id='email' type='email' value={email} focusBorderColor='red.500' onChange={(e) => setEmail(e.target.value)} placeholder='abc@gmail.com' required />
-                    </Box>
-                    <Box my={"4"}>
-                        <FormLabel htmlFor='password' children="Password" />
-                        <Input id='password' type='password' value={password} focusBorderColor='red.500' onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
-                    </Box>
-                    <Box my={"4"}>
-                        <FormLabel htmlFor='chooseAvatar' children="Choose Avatar" />
-                        <Input
-                            id='chooseAvatar'
-                            type='file'
-                            focusBorderColor='red.500'
-                            required accept='image/*'
-                            css={fileUploadStyle}
-                            onChange={changeImageHandler}
-                        />
-                    </Box>
+    return false;
+  };
 
+  const submitHandler = () => {
+    const myForm = new FormData();
+    myForm.append('name', name);
+    myForm.append('email', email);
+    myForm.append('password', password);
+    myForm.append('file', image);
+    dispatch(register(myForm));
+  };
 
-                    <Button w="full" type='submit' isLoading={loading} colorScheme='red' my={"4"} >Sign Up</Button>
-                    <Box >
-                        Already Signed Up? <Link to="/login" ><Button fontSize={"sm"} variant="link" colorScheme='red' >Login</Button></Link> {" "} here
-                    </Box>
-                </form>
-            </VStack>
-        </Container>
-    )
-}
+  return (
+    <Flex justify="center" align="center" style={{ minHeight: '85vh' }}>
+      <Card className="editorial-card" style={{ width: '100%', maxWidth: 460 }}>
+        <Flex vertical gap={24}>
+          <Title level={2} className="editorial-title" style={{ textAlign: 'center', marginBottom: 0 }}>
+            Registration
+          </Title>
+          <Flex justify="center">
+            <Avatar src={imagePrev} size={96} />
+          </Flex>
+          <Form layout="vertical" onFinish={submitHandler} requiredMark={false}>
+            <Form.Item label="Full Name" required>
+              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="abc" />
+            </Form.Item>
+            <Form.Item label="Email" required>
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="abc@gmail.com" />
+            </Form.Item>
+            <Form.Item label="Password" required>
+              <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+            </Form.Item>
+            <Form.Item label="Choose Avatar" required>
+              <Upload beforeUpload={changeImageHandler} maxCount={1} showUploadList={false}>
+                <Button icon={<UploadOutlined />}>Select Avatar</Button>
+              </Upload>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" loading={loading} block className="primary-button">
+                Sign Up
+              </Button>
+            </Form.Item>
+            <Flex justify="center" gap={8}>
+              <span>Already Signed Up?</span>
+              <Link to="/login">
+                <Button type="link">Login</Button>
+              </Link>
+            </Flex>
+          </Form>
+        </Flex>
+      </Card>
+    </Flex>
+  );
+};
 
-export default Register
+export default Register;

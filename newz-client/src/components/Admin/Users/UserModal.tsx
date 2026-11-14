@@ -1,79 +1,47 @@
-import { Avatar, Box, Button, Container, HStack, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, Text, VStack, } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { Avatar, Button, Flex, Modal, Select, Typography } from 'antd';
 import { useDispatch } from 'react-redux';
 import { changeUserRole, getAllUsers } from '../../../redux/actions/admin';
+import dayjs from 'dayjs';
 
-const UserModal = ({ isOpen, onClose, userDetail, loading }) => {
-    const [userRole, setUserRole] = useState("");
-    const dispatch = useDispatch<any>();
-    const role = ["User", "Writer", "Admin"];
-    const handleClose = () => {
-        onClose();
-    }
-    const changeRoleHandler = async (userId) => {
-        await dispatch(changeUserRole(userId, userRole));
-        dispatch(getAllUsers());
-        onClose();
-    }
-    return (
-        <Modal isOpen={isOpen} size="full" onClose={handleClose} scrollBehavior='inside' >
-            <ModalOverlay />
-            <ModalContent>
-                <ModalCloseButton  />
-                <ModalHeader>User Detail</ModalHeader>
-                <ModalBody p="16" h="100vh" >
-                    <Container minH="full" maxW="container.lg" py="8">
-                        <Stack justifyContent="flex-start" direction={["column", "row"]} alignItems="center" spacing={["8", "16"]} padding="8" >
-                            <VStack >
-                                <Avatar boxSize={["32", '48']} src={userDetail?.avatar.url} />
-                            </VStack>
-                            <VStack spacing="4" alignItems={["center", "flex-start"]} >
-                                <HStack >
-                                    <Text children="Name" fontWeight="bold" />
-                                    <Text children={userDetail?.name} />
-                                </HStack>
-                                <HStack >
-                                    <Text children="Email" fontWeight="bold" />
-                                    <Text children={userDetail?.email} />
-                                </HStack>
-                                <HStack >
-                                    <Text children="CreatedAt" fontWeight="bold" />
-                                    <Text children={userDetail?.createdAt.split("T")[0]} />
-                                </HStack>
-                                <HStack >
-                                    <Text children="CreatedAt" fontWeight="bold" />
-                                    <Text children={userDetail?.createdAt.split("T")[0]} />
-                                </HStack>
-                                <HStack >
-                                    <Text children="Role" fontWeight="bold" />
-                                    <Select
-                                        value={userRole}
-                                        onChange={(e) => setUserRole(e.target.value)}
-                                        focusBorderColor='red.300'
-                                    >
-                                        <option value="">Select Category</option>
-                                        {
-                                            role.map((item, index) => (
-                                                <option key={index} value={item}  >
-                                                    {item}
-                                                </option>
-                                            ))
-                                        }
-                                    </Select>
-                                </HStack>
-                                <HStack >
-                                            <Button isLoading={loading} onClick={() => changeRoleHandler(userDetail?._id)} colorScheme='green'>Change Role</Button>
-                                </HStack>
-                            </VStack>
-                        </Stack>
-                    </Container>
-                </ModalBody>
-                <ModalFooter >
-                    <Button colorScheme='red' onClick={handleClose} textTransform="uppercase" >Close</Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    );
+const { Title, Text } = Typography;
+
+const UserModal = ({ isOpen, onClose, userDetail, loading }: { isOpen: boolean; onClose: () => void; userDetail: any; loading: boolean }) => {
+  const [userRole, setUserRole] = useState('');
+  const dispatch = useDispatch<any>();
+  const role = ['User', 'Writer', 'Admin'];
+
+  const changeRoleHandler = async (userId: string) => {
+    await dispatch(changeUserRole(userId, userRole));
+    dispatch(getAllUsers());
+    onClose();
+  };
+
+  return (
+    <Modal open={isOpen} onCancel={onClose} footer={null} title="User Detail" width="90%">
+      <Flex gap={32} wrap="wrap" justify="center" align="center" style={{ padding: 16 }}>
+        <Avatar size={160} src={userDetail?.avatar?.url} />
+        <Flex vertical gap={16} style={{ minWidth: 320 }}>
+          <Flex justify="space-between"><Text strong>Name</Text><Text>{userDetail?.name}</Text></Flex>
+          <Flex justify="space-between"><Text strong>Email</Text><Text>{userDetail?.email}</Text></Flex>
+          <Flex justify="space-between"><Text strong>Created At</Text><Text>{userDetail?.createdAt ? dayjs(userDetail.createdAt).format('YYYY-MM-DD') : ''}</Text></Flex>
+          <Flex justify="space-between" align="center">
+            <Text strong>Role</Text>
+            <Select
+              value={userRole}
+              onChange={setUserRole}
+              style={{ width: 220 }}
+              placeholder="Select Role"
+              options={role.map((item) => ({ label: item, value: item }))}
+            />
+          </Flex>
+          <Button type="primary" loading={loading} onClick={() => changeRoleHandler(userDetail?._id)}>
+            Change Role
+          </Button>
+        </Flex>
+      </Flex>
+    </Modal>
+  );
 };
 
 export default UserModal;

@@ -1,96 +1,78 @@
-import { Box, Button, Grid, HStack, Heading, Input, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { Button, Card, Flex, Input, Popconfirm, Table, Typography } from 'antd';
 import UserModal from './UserModal';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import Sidebar from '../Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, getAllUsers } from '../../../redux/actions/admin';
+import { message as antdMessage } from 'antd';
 
+const { Title } = Typography;
 
 const Users = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [id, setId] = useState("");
-    const [userDetail, setUserDetail] = useState();
-    const dispatch = useDispatch<any>();
-    const {loading, users } = useSelector((state: any) => state.admin);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [id, setId] = useState('');
+  const [userDetail, setUserDetail] = useState<any>(null);
+  const dispatch = useDispatch<any>();
+  const { loading, users, message: adminMessage, error } = useSelector((state: any) => state.admin);
 
-    useEffect(() => {
-        dispatch(getAllUsers(id));
-    }, [dispatch, id]);
+  useEffect(() => {
+    dispatch(getAllUsers(id));
+  }, [dispatch, id]);
 
-    const detailHandler = (user) => {
-        setUserDetail(user);
-        onOpen()
+  useEffect(() => {
+    if (error) {
+      antdMessage.error(error);
+      dispatch({ type: 'clearError' });
     }
-
-    const deleteUserHandler = async (userId) => {
-        await dispatch(deleteUser(userId));
-        dispatch(getAllUsers());
+    if (adminMessage) {
+      antdMessage.success(adminMessage);
+      dispatch({ type: 'clearMessage' });
     }
+  }, [dispatch, error, adminMessage]);
 
-    return (
-        <Grid minH="100vh" templateColumns={["1fr", "5fr 1fr"]} >
-            <Box p={["0", "8"]} overflowX="auto" >
-                <Heading textTransform="uppercase" my="16" children="All available User" textAlign={["center", "left"]} />
-                <Input
-                    type='text'
-                    value={id}
-                    my="4"
-                    onChange={(e) => setId(e.target.value)}
-                    placeholder='Search News...'
-                    focusBorderColor='red.500'
-                />
-                <TableContainer w={["100vw", "full"]} >
-                    <Table variant="simple" >
-                        <TableCaption children="All available Users in the database" />
-                        <Thead >
-                            <Tr >
-                                <Th textTransform="uppercase" >ID</Th>
-                                <Th textTransform="uppercase" >Name</Th>
-                                <Th textTransform="uppercase" >Email</Th>
-                                <Th textTransform="uppercase" >Role</Th>
-                                <Th textTransform="uppercase" isNumeric>Action</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody >
-                            {
-                                users.map((item, index) => (
-                                    <Row key={index} onOpen={onOpen} item={item} detailHandler={detailHandler} deleteUserHandler={deleteUserHandler} />
-                                ))
-                            }
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-                <UserModal
-                    isOpen={isOpen}
-                    onClose={onClose}
-                    userDetail={userDetail}
-                    loading={loading}
-                />
-            </Box>
-            <Sidebar />
-        </Grid>
-    )
-}
+  const detailHandler = (user: any) => {
+    setUserDetail(user);
+    setModalOpen(true);
+  };
 
-export default Users
+  const deleteUserHandler = async (userId: string) => {
+    await dispatch(deleteUser(userId));
+    dispatch(getAllUsers());
+  };
 
+  const columns = [
+    { title: 'ID', dataIndex: '_id', key: '_id', width: 220 },
+    { title: 'Name', dataIndex: 'name', key: 'name' },
+    { title: 'Email', dataIndex: 'email', key: 'email' },
+    { title: 'Role', dataIndex: 'role', key: 'role' },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_: any, record: any) => (
+        <Flex gap={8}>
+          <Button type="primary" onClick={() => detailHandler(record)}>Change Role</Button>
+          <Popconfirm title="Delete this user?" onConfirm={() => deleteUserHandler(record._id)} okText="Delete" cancelText="Cancel">
+            <Button danger icon={<RiDeleteBin7Fill />} loading={loading} />
+          </Popconfirm>
+        </Flex>
+      ),
+    },
+  ];
 
-function Row({ onOpen, item, detailHandler, deleteUserHandler }) {
-    return (
-        <Tr>
-            <Td>{item._id}</Td>
-            <Td>{item.name}</Td>
-            <Td>{item.email}</Td>
-            <Td>{item.role}</Td>
-            <Td isNumeric>
-                <HStack justifyContent="flex-end" >
-                    <Button onClick={() => detailHandler(item)} variant="outline" colorScheme='green'>Change Role</Button>
-                    <Button variant="outline" onClick={() => deleteUserHandler(item._id)} colorScheme='red' >
-                        <RiDeleteBin7Fill />
-                    </Button>
-                </HStack>
-            </Td>
-        </Tr>
-    )
-}
+  return (
+    <Flex style={{ minHeight: '100vh' }}>
+      <div style={{ flex: 1, padding: 24 }}>
+        <Title level={2} className="editorial-title">All Available Users</Title>
+        <Input value={id} onChange={(e) => setId(e.target.value)} placeholder="Search by ID..." style={{ maxWidth: 360, marginBottom: 16 }} />
+        <Card className="editorial-card">
+          <Table rowKey="_id" columns={columns} dataSource={Array.isArray(users) ? users : []} loading={loading} pagination={{ pageSize: 8 }} />
+        </Card>
+        <UserModal isOpen={modalOpen} onClose={() => setModalOpen(false)} userDetail={userDetail} loading={loading} />
+      </div>
+      <Sidebar />
+    </Flex>
+  );
+};
+
+export default Users;

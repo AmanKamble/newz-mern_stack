@@ -1,32 +1,24 @@
-// ContactUs.js
-
 import React from 'react';
-import {
-    Container,
-    Heading,
-    Text,
-    VStack,
-    Link,
-} from '@chakra-ui/react';
+import { Button, Card, Flex, Typography } from 'antd';
+
+const { Title, Paragraph } = Typography;
 
 const ContactUs = () => {
-    return (
-        <Container h="100vh" maxW="container.lg" py={4}>
-            <VStack spacing={6} h="full" justify="center" align="center" p="16">
-                <Heading as="h1" size="xl">
-                    Contact Us
-                </Heading>
-
-                <Text fontSize="lg" textAlign="center">
-                    If you have any questions or feedback, please feel free to contact us:
-                </Text>
-
-                <Text fontSize="lg" textAlign="center">
-                    Email: <Link href="mailto:contact@newz.com" color="blue.500">contact@newz.com</Link>
-                </Text>
-            </VStack>
-        </Container>
-    );
+  return (
+    <Flex justify="center" align="center" style={{ minHeight: '80vh' }}>
+      <Card className="editorial-card" style={{ maxWidth: 640, width: '100%' }}>
+        <Flex vertical gap={16} align="center">
+          <Title level={1} className="editorial-title">Contact Us</Title>
+          <Paragraph style={{ textAlign: 'center', fontSize: 18, color: '#222222' }}>
+            If you have any questions or feedback, please feel free to contact us:
+          </Paragraph>
+          <Button type="primary" href="mailto:contact@newz.com" className="primary-button">
+            contact@newz.com
+          </Button>
+        </Flex>
+      </Card>
+    </Flex>
+  );
 };
 
 export default ContactUs;

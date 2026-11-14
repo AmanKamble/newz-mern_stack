@@ -1,109 +1,94 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, HStack, VStack, useDisclosure } from '@chakra-ui/react';
-import { RiDashboardFill, RiLogoutBoxLine, RiMenu5Fill } from "react-icons/ri"
+import { Button, Drawer, Flex, Space, Typography } from 'antd';
+import { RiDashboardFill, RiLogoutBoxLine, RiMenu5Fill } from 'react-icons/ri';
 import { logout } from '../../../redux/actions/user';
 import { useDispatch } from 'react-redux';
 
+const { Text } = Typography;
 
-const LinkButton = ({ url = "/", title = "Home", active, onClose }) => (
-  <Link to={url} >
-    <Button onClick={onClose} variant={active ? "solid" : "ghost"} colorScheme={active ? 'red' : 'black'}>{title}</Button>
+const LinkButton = ({ url = '/', title = 'Home', active = false, onClose }: { url?: string; title?: string; active?: boolean; onClose: () => void }) => (
+  <Link to={url}>
+    <Button type={active ? 'primary' : 'text'} onClick={onClose} style={{ width: '100%', justifyContent: 'flex-start' }}>
+      {title}
+    </Button>
   </Link>
-)
+);
 
-
-const Header = ({ isAuthenticated, user }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const Header = ({ isAuthenticated, user }: { isAuthenticated: boolean; user: any }) => {
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch<any>();
   const location = useLocation();
 
+  const onClose = () => setOpen(false);
   const logoutHandler = () => {
     onClose();
     dispatch(logout());
-  }
+  };
+
   return (
     <>
-      <Button onClick={onOpen} zIndex='overlay' colorScheme='red' width="12" height="12" rounded="full" position="fixed" top="3" left="4">
-        <RiMenu5Fill />
-      </Button>
+      <Button
+        type="primary"
+        shape="circle"
+        icon={<RiMenu5Fill />}
+        onClick={() => setOpen(true)}
+        style={{ position: 'fixed', top: 16, right: 16, zIndex: 1001 }}
+        className="primary-button"
+      />
 
-      <Drawer placement='left' onClose={onClose} isOpen={isOpen} >
-        <DrawerOverlay backdropFilter={"blur(2px)"} />
-        <DrawerContent >
-          <DrawerHeader children="NewZ" bg={"#d60f3a"} color={"white"} borderBottomWidth={"1px"} />
-          <DrawerBody >
-            <VStack spacing={"4"} alignItems={"flex-start"}>
-              <LinkButton
-                url="/"
-                title="Home"
-                active={location.pathname === "/"}
-                onClose={onClose}
-              />
-              <LinkButton
-                url="/aboutus"
-                title="About Us"
-                active={location.pathname === "/aboutus"}
-                onClose={onClose}
-              />
-              <LinkButton
-                url="/contactus"
-                title="Contact Us"
-                active={location.pathname === "/contactus"}
-                onClose={onClose}
-              />
-              {
-                isAuthenticated && user && user.role !== "admin" && user.role !== "writer" && (
-                  <LinkButton url="/sendwriterrequest" title="Send Writer Request" active={false} onClose={onClose} />
-                )
-              }
-              <HStack justifyContent="space-evenly" position="absolute" bottom="2rem" width="80%" >
-                {
-                  isAuthenticated ?
-                    (
-                      <>
-                        <VStack >
-                          <HStack>
-                            <Link to="/profile">
-                              <Button onClick={onClose} variant="ghost" colorScheme='green' >Profile</Button>
-                            </Link>
-                            <Button variant="ghost" colorScheme='red' onClick={logoutHandler}  >
-                              <RiLogoutBoxLine style={{ margin: '4px' }} />
-                              Logout
-                            </Button>
-                          </HStack>
-                          {
-                            user && (user.role === "admin" || user.role === "writer") && <Link to="/admin/createnews" >
-                              <Button onClick={onClose} colorScheme='yellow' variant="ghost" >
-                                < RiDashboardFill style={{ margin: '4px' }} />
-                                Dasboard
-                              </Button>
-                            </Link>
-                          }
-                        </VStack>
-                      </>
-                    )
-                    :
-                    (
-                      <>
-                        <Link to="/login">
-                          <Button onClick={onClose} colorScheme='red' >Login</Button>
-                        </Link>
-                        <p>OR</p>
-                        <Link to="/register">
-                          <Button onClick={onClose} colorScheme='red' >Sign Up</Button>
-                        </Link>
+      <Drawer
+        title={<span style={{ fontWeight: 800, fontSize: 22, letterSpacing: -1, color: '#222222' }}>New<span style={{ color: '#D71920' }}>Z</span></span>}
+        placement="left"
+        open={open}
+        onClose={onClose}
+        styles={{ body: { background: '#FFFFFF' }, header: { background: '#FFFFFF', borderBottom: '1px solid #E5E5E5' } }}
+      >
+        <Flex vertical gap={12} style={{ height: '100%' }}>
+          <Flex vertical gap={8}>
+            <LinkButton url="/" title="Home" active={location.pathname === '/'} onClose={onClose} />
+            <LinkButton url="/aboutus" title="About Us" active={location.pathname === '/aboutus'} onClose={onClose} />
+            <LinkButton url="/contactus" title="Contact Us" active={location.pathname === '/contactus'} onClose={onClose} />
+            {isAuthenticated && user && user.role !== 'admin' && user.role !== 'writer' && (
+              <LinkButton url="/sendwriterrequest" title="Send Writer Request" active={false} onClose={onClose} />
+            )}
+          </Flex>
 
-                      </>
-                    )
-                }
-              </HStack>
-            </VStack>
-          </DrawerBody>
-        </DrawerContent>
+          <Flex vertical gap={12} style={{ marginTop: 'auto' }}>
+            {isAuthenticated ? (
+              <>
+                <Space>
+                  <Link to="/profile">
+                    <Button onClick={onClose}>Profile</Button>
+                  </Link>
+                  <Button danger onClick={logoutHandler} icon={<RiLogoutBoxLine />}>
+                    Logout
+                  </Button>
+                </Space>
+                {user && (user.role === 'admin' || user.role === 'writer') && (
+                  <Link to="/admin/createnews">
+                    <Button onClick={onClose} type="primary" icon={<RiDashboardFill />}>
+                      Dashboard
+                    </Button>
+                  </Link>
+                )}
+              </>
+            ) : (
+              <Space>
+                <Link to="/login">
+                  <Button onClick={onClose} type="primary">Login</Button>
+                </Link>
+                <Text>OR</Text>
+                <Link to="/register">
+                  <Button onClick={onClose}>Sign Up</Button>
+                </Link>
+              </Space>
+            )}
+          </Flex>
+        </Flex>
       </Drawer>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

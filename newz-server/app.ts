@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import ErrorMiddleware from "./middlewares/Error.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { allowedOrigins } from "./config/allowedOrigins.js";
 
 config({
     path: "./config/config.env"
@@ -15,8 +16,15 @@ app.use(express.urlencoded({
     extended: true,
 }))
 app.use(cookieParser());
+
 app.use(cors({
-    origin: 'https://newz-frontend.vercel.app',
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));

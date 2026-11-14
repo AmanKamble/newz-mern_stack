@@ -1,142 +1,126 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, HStack, Heading, Image, Input, Spacer, Stack, Text, VStack } from '@chakra-ui/react';
+import { Button, Col, Flex, Image, Input, Row, Space, Spin, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllNews } from '../../redux/actions/news';
 import { Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import dummyImage from '../../assets/Images/dummy.jpg';
+import { message as antdMessage } from 'antd';
+import dayjs from 'dayjs';
+import NewsCard from '../News/NewsCard';
 
-const News = ({ title, content, imgSrc, category }) => {
-    return (
-        <HStack
-            className='news'
-            alignItems={["center", "flex-start"]}
-            spacing={4}
-            justifyContent="center"
-            borderRadius="md"
-            boxShadow="md"
-            backgroundColor="white"
-            border="1px solid #ccc"
-            w={["full", "410px"]}
-            p="3"
-        >
-            <Image flex={1} src={imgSrc ? imgSrc : dummyImage} boxSize="40" objectFit="contain" />
+const { Title, Text, Paragraph } = Typography;
 
-            <VStack flex={2} mb="4" align="flex-start" spacing={2}>
-                <HStack alignItems="flex-start" justifyContent="space-between" w="100%">
-                    <Text fontSize="sm" textTransform="uppercase" color="gray.600">
-                        {category}
-                    </Text>
-                    <Spacer />
-                </HStack>
-                <Heading textTransform="uppercase" noOfLines={3} size="sm" children={title} />
-                <Text fontSize="md" noOfLines={3} textAlign="justify"  >{content}</Text>
-            </VStack>
-        </HStack>
-    );
-}
+const categories = ['Entertainment', 'Cars', 'Sports', 'India', 'Technology', 'Science', 'Business', 'Health', 'Politics', 'Religion', 'Travel'];
 
 const Home = () => {
-    const [keyword, setKeyword] = useState('');
-    const [category, setCategory] = useState('');
-    const dispatch = useDispatch<any>();
-    const { news, error, message } = useSelector((state: any) => state.news);
+  const [keyword, setKeyword] = useState('');
+  const [category, setCategory] = useState('');
+  const dispatch = useDispatch<any>();
+  const { news, error, message: toastMessage, loading } = useSelector((state: any) => state.news);
 
+  const newsList = Array.isArray(news) ? news : [];
+  const featured = newsList.length > 1 ? newsList[0] : null;
+  const rest = featured ? newsList.slice(1) : newsList;
 
-    const categories = ["Entertainment", "Cars", "Sports", "India", "Technology", "Science", "Business", "Health", "Politics", "Religion", "Travel"];
+  useEffect(() => {
+    if (error) {
+      antdMessage.error(error);
+      dispatch({ type: 'clearError' });
+    }
+    if (toastMessage) {
+      antdMessage.success(toastMessage);
+      dispatch({ type: 'clearMessage' });
+    }
+  }, [dispatch, error, toastMessage]);
 
-    useEffect(() => {
-        if (error) {
-            toast.error(error, {
-                duration: 5000,
-            });
-            dispatch({ type: "clearError" });
-        }
-        if (message) {
-            toast.success(message, {
-                duration: 5000,
-            });
-            dispatch({ type: "clearMessage" });
-        }
-    }, [dispatch, error, message]);
-    useEffect(() => {
-        dispatch(getAllNews(category, keyword));
-    }, [dispatch, category, keyword]);
+  useEffect(() => {
+    dispatch(getAllNews(category, keyword));
+  }, [dispatch, category, keyword]);
 
-    return (
-        <Container minH="95vh" maxW="container.xl" paddingY="8">
-            <HStack
-                overflowX="auto"
-                paddingY={["8", "2"]}
-                css={{
-                    "&::-webkit-scrollbar": {
-                        width: 10,
-                        height: 6,
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                        background: "red",
-                        borderRadius: "10px",
-                    },
-                    "&::-webkit-scrollbar-track": {
-                        borderRadius: "10px",
-                        background: "linear-gradient(left, #212121, #323232)",
-                        boxShadow: "0 0 0.5px 0.5px #111",
-                    },
-                }}
-            >
-                <Button onClick={() => setCategory('')} minW='40' colorScheme='red'>
-                    <Text fontSize="md">All News</Text>
-                </Button>
-                {categories.map((item, index) => (
-                    <Button onClick={() => setCategory(item)} key={index} minW='40' colorScheme='red'>
-                        <Text fontSize="md">{item}</Text>
-                    </Button>
-                ))}
-            </HStack>
-            <Input
-                type='text'
-                value={keyword}
-                my="4"
-                onChange={(e) => setKeyword(e.target.value)}
-                placeholder='Search News...'
-                focusBorderColor='red.500'
+  return (
+    <div className="page-container">
+      <Flex vertical gap={40}>
+        {/* Hero */}
+        {newsList.length > 0 && featured ? (
+          <div className="editorial-card hero-section" style={{ overflow: 'hidden', minHeight: 360, position: 'relative' }}>
+            <Image
+              src={featured.poster?.url}
+              alt={featured.title}
+              preview={false}
+              style={{ width: '100%', height: 360, objectFit: 'cover', opacity: 0.55 }}
             />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.92) 100%)', padding: 32, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+              <Text style={{ color: '#D71920', textTransform: 'uppercase', fontWeight: 700, letterSpacing: 2 }}>{featured.category}</Text>
+              <Title level={1} className="editorial-title" style={{ margin: '8px 0', maxWidth: 900 }}>{featured.title}</Title>
+              <Paragraph style={{ color: '#222222', maxWidth: 760, fontSize: 16 }} ellipsis={{ rows: 2 }}>
+                {featured.content}
+              </Paragraph>
+              <Space>
+                <Text type="secondary">{featured.createdAt ? dayjs(featured.createdAt).format('MMMM D, YYYY') : ''}</Text>
+                <Link to={`/news/${featured._id}`}>
+                  <Button type="primary" className="primary-button">Read Full Story</Button>
+                </Link>
+              </Space>
+            </div>
+          </div>
+        ) : loading ? (
+          <Flex justify="center" style={{ minHeight: 240 }}><Spin size="large" /></Flex>
+        ) : newsList.length === 0 ? (
+          <div className="editorial-card" style={{ padding: 40, textAlign: 'center' }}>
+            <Title level={3} style={{ opacity: 0.6 }}>No featured news available</Title>
+          </div>
+        ) : null}
 
-            <Stack direction={["column", "row"]} flexWrap="wrap" justifyContent={["flex-start", "space-evenly"]} overflowY={["auto", "auto"] as any} alignItems={["center", "flex-start"]} css={{
-                "&::-webkit-scrollbar": {
-                    width: 10,
-                    height: 6,
-                },
-                "&::-webkit-scrollbar-thumb": {
-                    background: "red",
-                    borderRadius: "10px",
-                },
-                "&::-webkit-scrollbar-track": {
-                    borderRadius: "10px",
-                    background: "linear-gradient(left, #212121, #323232)",
-                    boxShadow: "0 0 0.5px 0.5px #111",
-                },
-            }} >
-                {
-                    news.length > 0 ? (
-                        news.map((item, index) => (
-                            <Link key={item._id} to={`/news/${item._id}`} >
-                                <News
-                                    title={item.title}
-                                    content={item.content}
-                                    imgSrc={item.poster.url}
-                                    category={item.category}
-                                />
-                            </Link>
-                        ))
-                    ) : (
+        {/* Controls */}
+        <Flex gap={16} wrap="wrap" align="center" justify="space-between">
+          <Space wrap>
+            <Button type={category === '' ? 'primary' : 'default'} onClick={() => setCategory('')} className="primary-button">
+              All News
+            </Button>
+            {categories.map((item) => (
+              <Button key={item} type={category === item ? 'primary' : 'default'} onClick={() => setCategory(item)}>
+                {item}
+              </Button>
+            ))}
+          </Space>
+          <Input
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="Search news..."
+            style={{ maxWidth: 360 }}
+            allowClear
+          />
+        </Flex>
 
-                        <Heading opacity={0.4} h="16" mt="4" children="News Not Found" />
-                    )
-                }
-            </Stack>
-        </Container>
-    );
+        {/* Trending / All news grid */}
+        <div>
+          <Title level={2} className="editorial-title" style={{ marginBottom: 20 }}>Latest News</Title>
+          {loading && newsList.length === 0 ? (
+            <Flex justify="center" style={{ minHeight: 200 }}><Spin size="large" /></Flex>
+          ) : rest.length > 0 ? (
+            <Row gutter={[20, 20]}>
+              {rest.map((item: any) => (
+                <Col key={item._id} xs={24} sm={12} md={8} lg={6}>
+                  <Link to={`/news/${item._id}`} style={{ textDecoration: 'none' }}>
+                    <NewsCard
+                      title={item.title}
+                      content={item.content}
+                      imgSrc={item.poster?.url}
+                      category={item.category}
+                      createdAt={item.createdAt}
+                    />
+                  </Link>
+                </Col>
+              ))}
+            </Row>
+          ) : newsList.length === 0 ? (
+            <div className="editorial-card" style={{ padding: 40, textAlign: 'center' }}>
+              <Title level={4} style={{ opacity: 0.5 }}>News Not Found</Title>
+            </div>
+          ) : null}
+        </div>
+      </Flex>
+    </div>
+  );
 };
 
 export default Home;

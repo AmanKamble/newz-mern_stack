@@ -1,132 +1,84 @@
-import { Button, ButtonGroup, Container, Grid, HStack, Heading, Spacer, Stack, Text, VStack } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import Sidebar from '../Sidebar'
+import React, { useEffect } from 'react';
+import { Button, Card, Flex, Space, Typography } from 'antd';
+import Sidebar from '../Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeUserRole, deleteWriterRequest, getAllWriterRequests } from '../../../redux/actions/admin';
-import { toast } from 'react-hot-toast';
+import { message as antdMessage } from 'antd';
 
-const WriterRequest = ({ item, deleteWriterRequestHandler, acceptWriterRequest }) => {
-  const accept = () => {
-    acceptWriterRequest(item._id, item.userId)
-  }
+const { Title, Text } = Typography;
+
+const WriterRequestCard = ({ item, deleteWriterRequestHandler, acceptWriterRequest }: any) => {
   return (
-    <VStack
-      className="news"
-      alignItems={["center", "flex-start"]}
-      spacing={4}
-      justifyContent="center"
-      borderRadius="md"
-      boxShadow="md"
-      backgroundColor="white"
-      border="1px solid #ccc"
-      w="full"
-      p="3"
-    >
-      <VStack mb="4" align="flex-start" spacing={2}>
-        <HStack>
-          <Heading textTransform="uppercase" size="sm" children="User Id :" />
-          <Text fontSize="md" textAlign="justify">
-            {item.userId}
-          </Text>
-        </HStack>
-        <HStack>
-          <Heading textTransform="uppercase" size="sm" children="Name :" />
-          <Text fontSize="md" textAlign="justify">
-            {item.name}
-          </Text>
-        </HStack>
-        <HStack>
-          <Heading textTransform="uppercase" size="sm" children="Email :" />
-          <Text fontSize="md" textAlign="justify">
-            {item.email}
-          </Text>
-        </HStack>
-        <VStack align="flex-start" pt="2">
-          <Heading textAlign="left" textTransform="uppercase" size="sm" children="Why we apoint you as a writer ?" />
-          <Text fontSize="md">{item.message}</Text>
-        </VStack>
-      </VStack>
-
-      <VStack w="full" mb="4">
-        <ButtonGroup gap="2">
-          <Button colorScheme='green' onClick={accept} >Accept</Button>
-          <Button colorScheme='red' variant="outline" onClick={() => deleteWriterRequestHandler(item._id)} >Decline</Button>
-        </ButtonGroup>
-      </VStack>
-    </VStack>
+    <Card className="editorial-card" style={{ width: 420, margin: 8 }}>
+      <Flex vertical gap={16}>
+        <Flex justify="space-between"><Text strong>User Id</Text><Text>{item.userId}</Text></Flex>
+        <Flex justify="space-between"><Text strong>Name</Text><Text>{item.name}</Text></Flex>
+        <Flex justify="space-between"><Text strong>Email</Text><Text>{item.email}</Text></Flex>
+        <Flex vertical gap={8}>
+          <Text strong>Why should we appoint you as a writer?</Text>
+          <Text>{item.message}</Text>
+        </Flex>
+        <Space>
+          <Button type="primary" onClick={() => acceptWriterRequest(item._id, item.userId)}>Accept</Button>
+          <Button danger onClick={() => deleteWriterRequestHandler(item._id)}>Decline</Button>
+        </Space>
+      </Flex>
+    </Card>
   );
 };
 
 const WriterRequests = () => {
-  const { writerRequest, message, error } = useSelector((state: any) => state.admin);
+  const { writerRequest, message: adminMessage, error } = useSelector((state: any) => state.admin);
   const dispatch = useDispatch<any>();
 
-  const deleteWriterRequestHandler = async (requestID) => {
+  const deleteWriterRequestHandler = async (requestID: string) => {
     await dispatch(deleteWriterRequest(requestID));
     dispatch(getAllWriterRequests());
-  }
+  };
 
-  const acceptWriterRequest = async (requestID, userId) => {
-    const userRole = "writer";
-    await dispatch(changeUserRole(userId, userRole));
+  const acceptWriterRequest = async (requestID: string, userId: string) => {
+    await dispatch(changeUserRole(userId, 'writer'));
     await dispatch(deleteWriterRequest(requestID));
     dispatch(getAllWriterRequests());
-  }
+  };
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
-      dispatch({ type: "clearError" });
+      antdMessage.error(error);
+      dispatch({ type: 'clearError' });
     }
-    if (message) {
-      toast.success(message);
-      dispatch({ type: "clearMessage" });
+    if (adminMessage) {
+      antdMessage.success(adminMessage);
+      dispatch({ type: 'clearMessage' });
     }
-  }, [dispatch, message, error]);
+  }, [dispatch, adminMessage, error]);
 
   useEffect(() => {
     dispatch(getAllWriterRequests());
   }, [dispatch]);
+
   return (
-    <Grid minH="100vh" templateColumns={["1fr", "5fr 1fr"]} >
-      <Container py="16">
-        <Stack direction={["column", "row"]} flexWrap="wrap" justifyContent={["flex-start", "space-evenly"]} alignItems={["center", "flex-start"]} css={{
-          "&::-webkit-scrollbar": {
-            width: 10,
-            height: 6,
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "red",
-            borderRadius: "10px",
-          },
-          "&::-webkit-scrollbar-track": {
-            borderRadius: "10px",
-            background: "linear-gradient(left, #212121, #323232)",
-            boxShadow: "0 0 0.5px 0.5px #111",
-          },
-        }} >
-          {
-            writerRequest.length > 0 ? (
-              writerRequest.map((item, index) => (
-                <WriterRequest
-                  key={index}
-                  item={item}
-                  deleteWriterRequestHandler={deleteWriterRequestHandler}
-                  acceptWriterRequest={acceptWriterRequest}
-                />
-              ))
-            ) : (
-              <Heading opacity={0.4} mt="4">
-                Writer Request Not Found
-              </Heading>
-            )
-          }
-
-        </Stack>
-      </Container>
+    <Flex style={{ minHeight: '100vh' }}>
+      <div style={{ flex: 1, padding: 24 }}>
+        <Title level={2} className="editorial-title">Writer Requests</Title>
+        <Flex wrap="wrap" justify="flex-start">
+          {Array.isArray(writerRequest) && writerRequest.length > 0 ? (
+            writerRequest.map((item: any, index: number) => (
+              <WriterRequestCard
+                key={index}
+                item={item}
+                deleteWriterRequestHandler={deleteWriterRequestHandler}
+                acceptWriterRequest={acceptWriterRequest}
+              />
+            ))
+          ) : (
+            <Title level={4} style={{ opacity: 0.5, marginTop: 32 }}>Writer Request Not Found</Title>
+          )}
+        </Flex>
+      </div>
       <Sidebar />
-    </Grid>
-  )
-}
+    </Flex>
+  );
+};
 
-export default WriterRequests
+export default WriterRequests;

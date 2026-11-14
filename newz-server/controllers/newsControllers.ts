@@ -15,7 +15,7 @@ export const getAllNews = catchAsyncError(
             category: {
                 $regex: new RegExp(category, "i"),
             },
-        })
+        }).populate("author", "name")
         res.status(200).json({
             success: true,
             news
@@ -32,7 +32,7 @@ export const getMyNewz = catchAsyncError(
                 title: {
                     $regex: new RegExp(keyward, "i"),
                 }
-            })
+            }).populate("author", "name")
         } else  {
             news = await News.find(
                 {
@@ -41,7 +41,7 @@ export const getMyNewz = catchAsyncError(
                         $regex: new RegExp(keyward, "i"),
                     }
                 }
-            );
+            ).populate("author", "name");
         }
         res.status(200).json({
             success: true,
